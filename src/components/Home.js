@@ -11,6 +11,9 @@ export default function Home() {
           <Link to='/about'>About</Link>
         </li>
         <li>
+          <Link to='/counter'>Counter</Link>
+        </li>
+        <li>
           <Link to='/topics'>Topics</Link>
         </li>
       </ul>
