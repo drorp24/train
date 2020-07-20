@@ -2,13 +2,13 @@ import React from 'react'
 import { Link, Switch, Route, useRouteMatch } from 'react-router-dom'
 import Topic from './Topic'
 
-export default function Topics() {
+export default function Nesting() {
   let match = useRouteMatch()
   console.log('Topics match: ', match)
 
   return (
     <div>
-      <h2>Topics</h2>
+      <h2>Route Nesting</h2>
 
       <ul>
         <li>
