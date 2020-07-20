@@ -8,6 +8,9 @@ export default function Home() {
       <h2>Home</h2>
       <ul>
         <li>
+          <Link to='/rates'>Exchange Rates</Link>
+        </li>
+        <li>
           <Link to='/simulateerror'>Simulate Error</Link>
         </li>
         <li>
