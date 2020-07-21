@@ -1,5 +1,7 @@
 import React from 'react'
-import { Link, Switch, Route, useRouteMatch } from 'react-router-dom'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
+
+import Link from './Link'
 import Topic from './Topic'
 
 export default function Nesting() {

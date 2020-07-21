@@ -1,8 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { increment, decrement } from '../redux/counter'
+import Link from './Link'
 
 const Counter = () => {
   const dispatch = useDispatch()
