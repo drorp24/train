@@ -1,3 +1,5 @@
+import * as dotenv from 'dotenv'
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 
@@ -10,6 +12,8 @@ import store from './redux/store'
 
 import { ApolloProvider } from '@apollo/client'
 import client from './apollo/client'
+
+dotenv.config()
 
 ReactDOM.render(
   <ApolloProvider client={client}>
