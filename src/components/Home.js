@@ -32,16 +32,19 @@ export default function Home() {
       <h2>Home</h2>
       <ul>
         <li>
-          <Link to='/rates'>Exchange Rates</Link>
+          <Link to='/todos'>Todos (AsyncThunk)</Link>
         </li>
         <li>
-          <Link to='/simulateerror'>Simulate Error</Link>
+          <Link to='/rates'>Exchange Rates (GraphQL)</Link>
         </li>
         <li>
-          <Link to='/counter'>Counter</Link>
+          <Link to='/simulateerror'>Simulate Error (ErrorBoundary)</Link>
         </li>
         <li>
-          <Link to='/nesting'>Route Nesting</Link>
+          <Link to='/counter'>Counter (Redux toolkit)</Link>
+        </li>
+        <li>
+          <Link to='/nesting'>Route Nesting (react-router)</Link>
         </li>
       </ul>
     </div>

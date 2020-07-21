@@ -8,6 +8,7 @@ import Nesting from './components/Nesting'
 import Counter from './components/Counter'
 import ErrorBoundary from './components/ErrorBoundary'
 import ExchangeRates from './components/ExchangeRates'
+import Todo from './components/Todo'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -36,6 +37,9 @@ export default function App() {
               </Route>
               <Route path='/counter'>
                 <Counter />
+              </Route>
+              <Route path='/todos'>
+                <Todo />
               </Route>
               <Route path='/'>
                 <Home />
