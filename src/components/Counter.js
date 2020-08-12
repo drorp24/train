@@ -10,7 +10,9 @@ const Counter = () => {
   return (
     <div>
       <h2>Counter</h2>
-      <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(increment())} data-testid='increment'>
+        Increment
+      </button>
       <button onClick={() => dispatch(decrement())}>Decrement</button>
       <h3>{`Counter value is ${counter}`}</h3>
       <Link to='/home'>Back Home</Link>

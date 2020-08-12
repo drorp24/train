@@ -48,9 +48,12 @@
     "packageManager": "yarn"
   },
   "peerDependencies": {
+    "@storybook/react": ">=5.2.0",
     "react": ">=16.9.0",
     "react-dom": ">=16.9.0",
-    "styles-components": ">=4.0.0",
-    "@storybook/react": ">=5.2.0"
+    "styles-components": ">=4.0.0"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^16.13.1"
   }
 }
