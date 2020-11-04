@@ -54,6 +54,7 @@
     "styles-components": ">=4.0.0"
   },
   "devDependencies": {
+    "@tsconfig/node14": "^1.0.0",
     "react-test-renderer": "^16.13.1"
   }
 }

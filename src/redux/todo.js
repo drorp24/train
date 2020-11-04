@@ -32,8 +32,12 @@ const todoAPI = {
 export const fetchTodoByUserId = createAsyncThunk(
   'todo/fetchTodoByUserId',
   async (userId, thunkAPI) => {
-    const response = await todoAPI.fetchTodoByUserId(userId)
-    return response.data
+    try {
+      const response = await todoAPI.fetchTodoByUserId(userId)
+      return response.data
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
   },
 )
 
