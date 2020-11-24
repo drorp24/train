@@ -1,14 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit'
 
-import counterReducer from './counter'
-import deviceReducer from './device'
-import todoReducer from './todo'
+import counter from './counter'
+import device from './device'
+import todo from './todo'
+import users from './users'
 
 const store = configureStore({
   reducer: {
-    counter: counterReducer,
-    device: deviceReducer,
-    todo: todoReducer,
+    counter,
+    device,
+    todo,
+    users,
   },
 })
 

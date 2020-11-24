@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import ProtectedRoute from './components/ProtectedRoute'
 import { useSelector } from 'react-redux'
 
 import Home from './components/Home'
@@ -9,6 +10,7 @@ import Counter from './components/Counter'
 import ErrorBoundary from './components/ErrorBoundary'
 import ExchangeRates from './components/ExchangeRates'
 import Todo from './components/Todo'
+import Login from './components/Login'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -26,23 +28,26 @@ export default function App() {
         <ErrorBoundary>
           <Router>
             <Switch>
-              <Route path='/rates'>
+              <ProtectedRoute exact path="/">
+                <Home />
+              </ProtectedRoute>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="/rates">
                 <ExchangeRates />
               </Route>
-              <Route path='/simulateerror'>
+              <Route path="/simulateerror">
                 <SimulateError />
               </Route>
-              <Route path='/nesting'>
+              <Route path="/nesting">
                 <Nesting />
               </Route>
-              <Route path='/counter'>
+              <Route path="/counter">
                 <Counter />
               </Route>
-              <Route path='/todos'>
+              <Route path="/todos">
                 <Todo />
-              </Route>
-              <Route path='/'>
-                <Home />
               </Route>
             </Switch>
           </Router>
