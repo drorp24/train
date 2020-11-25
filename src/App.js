@@ -12,6 +12,7 @@ import ExchangeRates from './components/ExchangeRates'
 import Todo from './components/Todo'
 import Login from './components/Login'
 import AppBar from './components/AppBar'
+import SnackBar from './components/Snackbar'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -52,6 +53,7 @@ export default function App() {
                 <Todo />
               </Route>
             </Switch>
+            <SnackBar />
           </Router>
         </ErrorBoundary>
       </ThemeProvider>
