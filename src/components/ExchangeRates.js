@@ -29,12 +29,12 @@ export default function ExchangeRates() {
 
   return (
     <>
-      <Link to='/home'>Back Home</Link>
+      <Link to="/">Back Home</Link>
       <br />
       <br />
 
       <div>
-        <input type='text' value={currency} onChange={updateCurrency}></input>
+        <input type="text" value={currency} onChange={updateCurrency}></input>
       </div>
 
       {data.rates ? (

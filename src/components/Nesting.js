@@ -32,7 +32,7 @@ export default function Nesting() {
         {/* <Route path={match.path}></Route> */}
       </Switch>
 
-      <Link to='/home'>Back Home</Link>
+      <Link to="/">Back Home</Link>
     </div>
   )
 }

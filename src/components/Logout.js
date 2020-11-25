@@ -12,6 +12,7 @@ const useStyles = makeStyles(theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: '3em',
+    minWidth: '15vw',
   },
   username: {
     marginRight: '1em',
@@ -22,6 +23,7 @@ const useStyles = makeStyles(theme => ({
   button: {
     lineHeight: '2',
     fontSize: '0.8125rem',
+    color: 'white',
   },
 }))
 
@@ -34,20 +36,22 @@ const Logout = () => {
     dispatch(logout())
   }
 
-  if (!username) return null
-
   return (
     <div className={classes.root}>
-      <span className={classes.username}>{username}</span>
-      <Button
-        className={classes.button}
-        size="small"
-        color="primary"
-        endIcon={<PowerSettingsNewIcon />}
-        onClick={handleClick}
-      >
-        Logout
-      </Button>
+      <span className={classes.username}>
+        {username || 'No user logged in'}
+      </span>
+      {username && (
+        <Button
+          className={classes.button}
+          size="small"
+          color="primary"
+          endIcon={<PowerSettingsNewIcon />}
+          onClick={handleClick}
+        >
+          Logout
+        </Button>
+      )}
     </div>
   )
 }

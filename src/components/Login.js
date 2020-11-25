@@ -19,12 +19,22 @@ import Typography from '@material-ui/core/Typography'
 import Container from '@material-ui/core/Container'
 
 // !  login
-// 
-// ? Depends on 'loggedIn' state
-// Rather than awaiting anything here (we can't await the dispatch as the dispatch itself is synchronous),
-// this gatekeeper component opens or closes the gate according to a 'loggedIn' state.
-// That state in turn gets updated as a future result of the dispatch call here
-
+//
+// ? Declarative, depends on 'loggedIn' state
+// Login is the gatekeeper component in charge of openning or closing the gate.
+// Though it's the Login component that triggers the async api that checks the login/password,
+// it doesn't await anything (it couldn't if it wanted to: the dispatch call itself in synchronos).
+//
+// Instead, it listen to the 'loggedIn' state (1) and returns a different component according to whethe rthe user is loggedIn or not:
+// - LoggedIn - returns a <Redirect /> component (2), the target of which is what the router's state saved in 'from' (3):
+//              the original destination the user wanted to reach
+// - not loggedIn - returns the form ,whose submit button initiates that dispatch of the api that checks the login/password
+//
+// Notes:
+// (1) That 'loggedIn' state in itself is the future outcome of the dispatch call Login has made, however Login doesn't await anything but responds to state changes.
+// (2) It could alternatively call history.push imperatively, but I preferred staying declarative, so I'm returning a component instead.
+// (3) React router allows keeping a state, utilized here to remember the url originally requested by the user before being redirected to /login.
+//
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -86,8 +96,8 @@ export default function Login() {
             autoComplete="username"
             autoFocus
             inputRef={register({ required: true })}
-            error={!!errors.user_name}
-            helperText={errors.user_name && 'User name is required'}
+            error={!!errors.username}
+            helperText={errors.username && 'User name is required'}
           />
           <TextField
             variant="outlined"

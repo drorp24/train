@@ -44,7 +44,7 @@ const Todo = () => {
   return (
     <div>
       <div>
-        <Link to='/home'>Back Home</Link>
+        <Link to="/">Back Home</Link>
       </div>
       <div>
         <TextField value={userId} onChange={updateUserId}></TextField>

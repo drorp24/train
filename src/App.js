@@ -11,6 +11,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 import ExchangeRates from './components/ExchangeRates'
 import Todo from './components/Todo'
 import Login from './components/Login'
+import AppBar from './components/AppBar'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -27,6 +28,7 @@ export default function App() {
         <CssBaseline />
         <ErrorBoundary>
           <Router>
+            <AppBar />
             <Switch>
               <ProtectedRoute exact path="/">
                 <Home />
