@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { fetchTodoByUserId, clear } from '../redux/todo'
-import Link from './Link'
 import TextField from '@material-ui/core/TextField'
 
 const Todo = () => {
@@ -19,20 +18,10 @@ const Todo = () => {
 
   useEffect(() => {
     const fetchUserTodos = async () => {
-      try {
-        // I'm not 'awaiting' the response as I don't need to place the resulting records in the component's state
-        // Instead I'm taking the records directly from redux
-        // I'm merely triggering the dispatch upon component mount
         if (userId && userId > 0) {
           dispatch(clear())
           dispatch(fetchTodoByUserId(userId))
         }
-        // unwrapResult = extract the payload or error from the result
-        // I don't need it here since redux has already unwrapped the entities out of the paykiad
-        // const todos = unwrapResult(fetchResult)
-      } catch (error) {
-        console.error('Failure! error:', error)
-      }
     }
     fetchUserTodos()
   }, [dispatch, userId])
@@ -43,9 +32,7 @@ const Todo = () => {
 
   return (
     <div>
-      <div>
-        <Link to="/">Back Home</Link>
-      </div>
+   
       <div>
         <TextField value={userId} onChange={updateUserId}></TextField>
       </div>

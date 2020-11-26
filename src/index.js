@@ -10,17 +10,12 @@ import * as serviceWorker from './serviceWorker'
 import { Provider } from 'react-redux'
 import store from './redux/store'
 
-import { ApolloProvider } from '@apollo/client'
-import client from './apollo/client'
-
 dotenv.config()
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
     <Provider store={store}>
       <App />
-    </Provider>
-  </ApolloProvider>,
+    </Provider>,
   document.getElementById('root'),
 )
 
