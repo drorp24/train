@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 
 import SimulateError from './components/SimulateError'
 import ErrorBoundary from './components/ErrorBoundary'
-import Todo from './components/Todo'
+import Home from './components/Home'
 import Login from './components/Login'
 import AppBar from './components/AppBar'
 import SnackBar from './components/Snackbar'
@@ -32,7 +32,7 @@ export default function App() {
             <AppBar />
             <Switch>
               <Route exact path="/">
-                <Todo />
+                <Home />
               </Route>
               <Route path="/login">
                 <Login />

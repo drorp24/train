@@ -1,10 +1,8 @@
 // import React from 'react'
 import React, { useEffect, useState } from 'react'
-
-// import { unwrapResult } from '@reduxjs/toolkit'
 import { useSelector, useDispatch } from 'react-redux'
-
 import { fetchTodoByUserId, clear } from '../redux/todo'
+
 import TextField from '@material-ui/core/TextField'
 
 const Todo = () => {
@@ -18,10 +16,10 @@ const Todo = () => {
 
   useEffect(() => {
     const fetchUserTodos = async () => {
-        if (userId && userId > 0) {
-          dispatch(clear())
-          dispatch(fetchTodoByUserId(userId))
-        }
+      if (userId && userId > 0) {
+        dispatch(clear())
+        dispatch(fetchTodoByUserId(userId))
+      }
     }
     fetchUserTodos()
   }, [dispatch, userId])
@@ -32,7 +30,6 @@ const Todo = () => {
 
   return (
     <div>
-   
       <div>
         <TextField value={userId} onChange={updateUserId}></TextField>
       </div>

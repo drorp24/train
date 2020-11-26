@@ -2,8 +2,8 @@ import React from 'react'
 
 import Paper from '@material-ui/core/Paper'
 
-const Page = ({ children }) => (
-  <Paper square style={{ height: '100vh' }}>
+const Page = ({ children, ...rest }) => (
+  <Paper square style={{ height: '100vh' }} {...rest}>
     {children}
   </Paper>
 )
