@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 const idOne = uuidv4()
 const idTwo = uuidv4()
 
-const timeout = 1000
+const timeout = 100
 
 const users = {
   [idOne]: {

@@ -1,7 +1,7 @@
 // import React from 'react'
 import React from 'react'
 
-import Page from './Page'
+import UnderAppBar from './UnderAppBar'
 import List from './List'
 import Map from './Map'
 
@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
   home: {
     display: 'grid',
     gridTemplateColumns: '1fr 2fr',
+    height: '100%',
   },
 }))
 
@@ -18,10 +19,10 @@ const Home = () => {
   const classes = useStyles()
 
   return (
-    <Page className={classes.home}>
+    <UnderAppBar className={classes.home}>
       <List />
       <Map />
-    </Page>
+    </UnderAppBar>
   )
 }
 

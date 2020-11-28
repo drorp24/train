@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
@@ -7,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles'
 const useStyles = makeStyles(theme => ({
   map: {
     height: '100%',
+    overflow: 'scroll',
   },
 }))
 
@@ -15,8 +17,8 @@ const Map = () => {
 
   return (
     <MapContainer
-      center={[51.505, -0.09]}
-      zoom={13}
+      center={[32.12504, 34.83082]}
+      zoom={17}
       scrollWheelZoom={false}
       className={classes.map}
     >
@@ -24,7 +26,7 @@ const Map = () => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[51.505, -0.09]}>
+      <Marker position={[32.12504, 34.83082]}>
         <Popup>
           A pretty CSS3 popup.
           <br /> Easily customizable.

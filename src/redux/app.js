@@ -2,18 +2,20 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const appSlice = createSlice({
   name: 'app',
-  initialState: { mode: 'light', language: 'en' },
+  initialState: { mode: 'light', lang: 'en' },
   reducers: {
-    toggleMode: ({ mode }) => {
-      return { mode: mode === 'light' ? 'dark' : 'light' }
-    },
-    toggleLanguage: ({ language }) => {
-      return { language: language === 'en' ? 'he' : 'en' }
-    },
+    toggleMode: state => ({
+      ...state,
+      mode: state.mode === 'light' ? 'dark' : 'light',
+    }),
+    toggleLang: state => ({
+      ...state,
+      lang: state.lang === 'en' ? 'he' : 'en',
+    }),
   },
 })
 
 const { actions, reducer } = appSlice
 
 export default reducer
-export const { toggleMode, toggleLanguage } = actions
+export const { toggleMode, toggleLang } = actions

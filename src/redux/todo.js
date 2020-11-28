@@ -16,10 +16,10 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 const todoAPI = {
-  async fetchTodoByUserId(userId) {
+  async fetchTodo() {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_TODO_ENDPOINT}/users/${userId}/todos`,
+        `${process.env.REACT_APP_TODO_ENDPOINT}/todos`
       )
       return response
     } catch (error) {
@@ -29,17 +29,14 @@ const todoAPI = {
 }
 
 // First, create the thunk
-export const fetchTodoByUserId = createAsyncThunk(
-  'todo/fetchTodoByUserId',
-  async (userId, thunkAPI) => {
-    try {
-      const response = await todoAPI.fetchTodoByUserId(userId)
-      return response.data
-    } catch (error) {
-      return thunkAPI.rejectWithValue(error)
-    }
-  },
-)
+export const fetchTodo = createAsyncThunk('todo/fetchTodo', async thunkAPI => {
+  try {
+    const response = await todoAPI.fetchTodo()
+    return response.data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+})
 
 // Then, handle actions in your reducers:
 const todoSlice = createSlice({
@@ -51,14 +48,14 @@ const todoSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchTodoByUserId.pending]: (state, action) => {
+    [fetchTodo.pending]: (state, action) => {
       if (state.loading === 'idle') {
         state.loading = 'pending'
         state.currentRequestId = action.meta.requestId
       }
     },
 
-    [fetchTodoByUserId.fulfilled]: (state, action) => {
+    [fetchTodo.fulfilled]: (state, action) => {
       const { requestId } = action.meta
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.loading = 'idle'
@@ -67,7 +64,7 @@ const todoSlice = createSlice({
       }
     },
 
-    [fetchTodoByUserId.rejected]: (state, action) => {
+    [fetchTodo.rejected]: (state, action) => {
       const { requestId } = action.meta
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.loading = 'idle'

@@ -1,57 +1,65 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 import { logout } from '../redux/users'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import PowerSettingsNewIcon from '@material-ui/icons/PowerSettingsNew'
+import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: '3em',
-    minWidth: '15vw',
   },
   username: {
-    marginRight: '1em',
-    lineHeight: '2',
-    fontSize: '0.8125rem',
+    fontSize: '1rem',
+    padding: '0 2rem',
     textTransform: 'uppercase',
+    color: theme.palette.secondary.light,
   },
-  button: {
-    lineHeight: '2',
-    fontSize: '0.8125rem',
+  loginButton: {
     color: 'white',
+  },
+  logoutButton: {
+    fontSize: '1rem',
+    color: ({ username }) => (username ? 'white' : '#888 !important'),
   },
 }))
 
 const Logout = () => {
   const username = useSelector(store => store.users.loggedIn.username)
   const dispatch = useDispatch()
-  const classes = useStyles()
+  const history = useHistory()
+  const classes = useStyles({ username })
 
-  const handleClick = () => {
+  const performLogout = () => {
     dispatch(logout())
+  }
+
+  const performLogin = () => {
+    history.push('/login')
   }
 
   return (
     <div className={classes.root}>
-      <span className={classes.username}>
-        {username || 'No user logged in'}
-      </span>
-      {username && (
-        <Button
-          className={classes.button}
-          size="small"
-          color="primary"
-          endIcon={<PowerSettingsNewIcon />}
-          onClick={handleClick}
-        >
-          Logout
-        </Button>
+      {username ? (
+        <span className={classes.username}>{username}</span>
+      ) : (
+        <IconButton className={classes.loginButton} onClick={performLogin}>
+          <AccountCircleIcon />
+        </IconButton>
       )}
+
+      <IconButton
+        className={classes.logoutButton}
+        onClick={performLogout}
+        disabled={!username}
+      >
+        <PowerSettingsNewIcon />
+      </IconButton>
     </div>
   )
 }
