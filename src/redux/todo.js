@@ -28,7 +28,6 @@ const todoAPI = {
   },
 }
 
-// First, create the thunk
 export const fetchTodo = createAsyncThunk('todo/fetchTodo', async thunkAPI => {
   try {
     const response = await todoAPI.fetchTodo()
@@ -38,13 +37,21 @@ export const fetchTodo = createAsyncThunk('todo/fetchTodo', async thunkAPI => {
   }
 })
 
-// Then, handle actions in your reducers:
+// ToDo: do the reorder logic here, replacing the reoder function
 const todoSlice = createSlice({
   name: 'todo',
   initialState: { entities: [], loading: 'idle' },
   reducers: {
-    clear: state => {
-      state.entities = []
+    clear: state => ({ ...state, entities: [] }),
+    reorder: (state, { payload: { draggableId, source, destination } }) => {
+      // Immer "mutation" to the rescue
+      const [removed] = state.entities.splice(source.index, 1)
+      state.entities.splice(destination.index, 0, removed)
+      state.entities[destination.index].position = {
+        draggableId,
+        source,
+        destination,
+      }
     },
   },
   extraReducers: {
@@ -76,6 +83,6 @@ const todoSlice = createSlice({
 })
 
 const { reducer, actions } = todoSlice
-export const { clear } = actions
+export const { clear, reorder } = actions
 
 export default reducer

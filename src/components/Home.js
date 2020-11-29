@@ -1,5 +1,7 @@
 // import React from 'react'
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { clear, fetchTodo } from '../redux/todo'
 
 import UnderAppBar from './UnderAppBar'
 import List from './List'
@@ -16,11 +18,22 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Home = () => {
+  const { entities, loading, error } = useSelector(state => state.todo)
+  const dispatch = useDispatch()
   const classes = useStyles()
+
+  useEffect(() => {
+    dispatch(clear())
+    dispatch(fetchTodo())
+  }, [dispatch])
+
+  if (loading !== 'idle') return <p>Loading...</p>
+  if (error) return <p>Error...</p>
+  if (!entities || entities.lenghth === 0) return <p>No todos for this user!</p>
 
   return (
     <UnderAppBar className={classes.home}>
-      <List />
+      <List entities={entities} />
       <Map />
     </UnderAppBar>
   )

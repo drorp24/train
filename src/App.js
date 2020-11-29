@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import ProtectedRoute from './components/ProtectedRoute'
+// import ProtectedRoute from './components/ProtectedRoute'
 
 import SimulateError from './components/SimulateError'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -36,9 +36,9 @@ export default function App() {
               <Page>
                 <AppBar />
                 <Switch>
-                  <ProtectedRoute exact path="/">
+                  <Route exact path="/">
                     <Home />
-                  </ProtectedRoute>
+                  </Route>
                   <Route path="/login">
                     <Login />
                   </Route>
