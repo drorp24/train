@@ -32,20 +32,14 @@ const getUsers = () =>
   })
 
 export const getUser = async ({ username, password }) => {
-  console.log('args. username, password: ', username, password)
   try {
     const users = await getUsers()
-    console.log('users: ', users)
     const userFound = users.find(
       user => user.username === username && user.password === password
     )
-    console.log('userFound: ', userFound)
     if (userFound) return userFound
     throw new Error('No such user')
-  } catch (error) {
-    console.log('at catch')
-    console.log(error)
-  }
+  } catch (error) {}
 }
 
 // Test

@@ -61,7 +61,6 @@ export default function ButtonAppBar() {
   const classes = useStyles({ lang })
 
   const location = useLocation()
-  console.log('location.pathname: ', location.pathname)
   if (location.pathname === '/login') return null
 
   const pageName = location =>

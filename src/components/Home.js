@@ -1,7 +1,7 @@
 // import React from 'react'
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { clear, fetchTodo } from '../redux/todo'
+import { fetchMerchants } from '../redux/merchants'
 
 import UnderAppBar from './UnderAppBar'
 import List from './List'
@@ -18,22 +18,34 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Home = () => {
-  const { entities, loading, error } = useSelector(state => state.todo)
-  const dispatch = useDispatch()
-  const classes = useStyles()
+  // List component is generic
+  const listConfig = {
+    selector: 'merchants',
+    fields: {
+      en: ['id', 'name', 'address'],
+      he: ['id', 'name_he', 'address_he'],
+    },
+  }
 
+  const classes = useStyles()
+  const dispatch = useDispatch()
+  // ToDo: 'reselect' or (better) createEntityAdapter
+
+  const { entities, loading, error } = useSelector(
+    state => state[listConfig.selector]
+  )
+  // ToDo: check if apollo caches and de-dupes results
   useEffect(() => {
-    dispatch(clear())
-    dispatch(fetchTodo())
-  }, [dispatch])
+    if (!entities.length) dispatch(fetchMerchants())
+  }, [dispatch, entities.length])
 
   if (loading !== 'idle') return <p>Loading...</p>
   if (error) return <p>Error...</p>
-  if (!entities || entities.lenghth === 0) return <p>No todos for this user!</p>
+  if (!entities || entities.lenghth === 0) return <p>No records</p>
 
   return (
     <UnderAppBar className={classes.home}>
-      <List entities={entities} />
+      <List {...{ listConfig, entities }} />
       <Map />
     </UnderAppBar>
   )

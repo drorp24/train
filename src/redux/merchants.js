@@ -1,30 +1,20 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import axios from 'axios'
+import { getMerchants } from '../api/useMerchants'
 
-const todoAPI = {
-  async fetchTodo() {
+export const fetchMerchants = createAsyncThunk(
+  'merchants/fetchMerchants',
+  async thunkAPI => {
     try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_TODO_ENDPOINT}/todos`
-      )
-      return response
+      const response = await getMerchants()
+      return response.data?.merchants?.records
     } catch (error) {
-      console.error(error)
+      return thunkAPI.rejectWithValue(error)
     }
-  },
-}
-
-export const fetchTodo = createAsyncThunk('todo/fetchTodo', async thunkAPI => {
-  try {
-    const response = await todoAPI.fetchTodo()
-    return response.data
-  } catch (error) {
-    return thunkAPI.rejectWithValue(error)
   }
-})
+)
 
-const todoSlice = createSlice({
-  name: 'todo',
+const merchantsSlice = createSlice({
+  name: 'merchants',
   initialState: { entities: [], loading: 'idle' },
   reducers: {
     clear: state => ({ ...state, entities: [] }),
@@ -42,23 +32,24 @@ const todoSlice = createSlice({
     },
   },
   extraReducers: {
-    [fetchTodo.pending]: (state, action) => {
+    [fetchMerchants.pending]: (state, action) => {
       if (state.loading === 'idle') {
         state.loading = 'pending'
         state.currentRequestId = action.meta.requestId
       }
     },
 
-    [fetchTodo.fulfilled]: (state, action) => {
+    [fetchMerchants.fulfilled]: (state, action) => {
       const { requestId } = action.meta
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.loading = 'idle'
-        action.payload.forEach(entity => state.entities.push(entity))
+        action.payload &&
+          action.payload.forEach(entity => state.entities.push(entity))
         state.currentRequestId = undefined
       }
     },
 
-    [fetchTodo.rejected]: (state, action) => {
+    [fetchMerchants.rejected]: (state, action) => {
       const { requestId } = action.meta
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.loading = 'idle'
@@ -69,7 +60,7 @@ const todoSlice = createSlice({
   },
 })
 
-const { reducer, actions } = todoSlice
+const { reducer, actions } = merchantsSlice
 export const { clear, reorder } = actions
 
 export default reducer

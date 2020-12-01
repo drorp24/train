@@ -1,12 +1,14 @@
 // import React from 'react'
-import React, { memo } from 'react'
+import React, { memo, createContext, useContext } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { reorder } from '../redux/todo'
+import { reorder } from '../redux/merchants'
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
 
 const useStyles = makeStyles(theme => ({
   entity: {
@@ -23,8 +25,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const getDraggableStyle = (isDragging, draggableStyle) => ({
-  background: isDragging ? 'lightgreen' : 'white',
+const getDraggableStyle = (isDragging, draggableStyle, mode, lang) => ({
+  background: isDragging ? 'lightgreen' : mode === 'light' ? 'white' : '#333',
   ...draggableStyle,
 })
 
@@ -33,17 +35,28 @@ const getDroppableStyle = isDraggingOver => ({
   paddingTop: '1px', // hack
 })
 
-// ToDo: use reselect / memoize / key by something to not do an O(n) search with every drag
-const Entity = ({ title, id, index }) => {
+const ListConfig = createContext({})
+
+// ToDo: use createEntityAdapter / reselect / memoize / key to directly aceess rather than search with every drag
+const Entity = ({ id, index }) => {
+  const { mode, lang } = useSelector(store => store.app)
   const draggableId = String(id)
+  const config = useContext(ListConfig)
+  const {
+    selector,
+    fields: { [lang]: lfields },
+  } = config
+
   const entity = useSelector(store =>
-    store.entities?.find(entity => entity.id === id)
+    store[selector].entities?.find(entity => entity.id === id)
   )
+
   if (entity && entity.position) {
-    var direction =
-      entity.position.source?.index < entity.position.destination?.index
-        ? 'down'
-        : 'up'
+    const [from, to] = [
+      entity.position.source?.index,
+      entity.position.destination?.index,
+    ]
+    var direction = from < to ? 'down' : from > to ? 'up' : null
   }
   const classes = useStyles()
   return (
@@ -54,12 +67,27 @@ const Entity = ({ title, id, index }) => {
           ref={innerRef}
           {...draggableProps}
           {...dragHandleProps}
-          style={getDraggableStyle(isDragging, draggableProps.style)} // must be last
+          style={getDraggableStyle(
+            isDragging,
+            draggableProps.style,
+            mode,
+            lang
+          )} // must be last
         >
-          <span>{title}</span>
-          <span>{id}</span>
-          <span>{index}</span>
-          {direction && <span>{direction}</span>}
+          <div key={id}>
+            {lfields.map((field, index) => {
+              return <p key={index}>{entity[field]}</p>
+            })}
+            {direction && (
+              <p>
+                {direction === 'up' ? (
+                  <ArrowUpwardIcon />
+                ) : (
+                  <ArrowDownwardIcon />
+                )}
+              </p>
+            )}
+          </div>
         </div>
       )}
     </Draggable>
@@ -67,12 +95,10 @@ const Entity = ({ title, id, index }) => {
 }
 
 const Entities = memo(({ entities }) =>
-  entities.map(({ title, id }, index) => (
-    <Entity {...{ title, id, index }} key={id} />
-  ))
+  entities.map(({ id }, index) => <Entity key={id} {...{ id, index }} />)
 )
 
-const List = ({ entities }) => {
+const List = ({ listConfig, entities }) => {
   const dispatch = useDispatch()
   const classes = useStyles()
 
@@ -84,20 +110,25 @@ const List = ({ entities }) => {
 
   return (
     <Paper square elevation={5} className={classes.list}>
-      <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="list">
-          {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
-            <div
-              ref={innerRef}
-              style={getDroppableStyle(isDraggingOver)}
-              {...droppableProps}
-            >
-              <Entities {...{ entities }} />
-              {placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <ListConfig.Provider value={listConfig}>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="list">
+            {(
+              { innerRef, droppableProps, placeholder },
+              { isDraggingOver }
+            ) => (
+              <div
+                ref={innerRef}
+                style={getDroppableStyle(isDraggingOver)}
+                {...droppableProps}
+              >
+                <Entities {...{ entities }} />
+                {placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </ListConfig.Provider>
     </Paper>
   )
 }

@@ -6,7 +6,6 @@ export const fetchUser = createAsyncThunk(
   async ({ username, password }, thunkAPI) => {
     try {
       const data = await getUser({ username, password })
-      if (!data) throw 'No such user. Please try again'
       if (data.error) throw data.error
       return data
     } catch (error) {
@@ -47,7 +46,6 @@ const usersSlice = createSlice({
     },
 
     [fetchUser.rejected]: (state, { meta: { requestId }, payload }) => {
-      console.log('payload: ', payload)
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.currentRequestId = undefined
         state.loading = 'idle'
