@@ -3,8 +3,8 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchMerchants } from '../redux/merchants'
 
-import UnderAppBar from './UnderAppBar'
-import List from './List'
+import Page from './layout/Page'
+import List from './list/List'
 import Map from './Map'
 
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,8 +18,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Home = () => {
-  // List component is generic
   const listConfig = {
+    // List component is generic
     selector: 'merchants',
     fields: {
       en: ['id', 'name', 'address'],
@@ -39,15 +39,15 @@ const Home = () => {
     if (!entities.length) dispatch(fetchMerchants())
   }, [dispatch, entities.length])
 
-  if (loading !== 'idle') return <p>Loading...</p>
-  if (error) return <p>Error...</p>
-  if (!entities || entities.lenghth === 0) return <p>No records</p>
+  const { length } = entities
 
   return (
-    <UnderAppBar className={classes.home}>
-      <List {...{ listConfig, entities }} />
-      <Map />
-    </UnderAppBar>
+    <Page appBar {...{ loading, error, length }}>
+      <div className={classes.home}>
+        <List {...{ listConfig, entities }} />
+        <Map />
+      </div>
+    </Page>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 import { BrowserRouter as Router } from 'react-router-dom'
-import Link from './Link'
 
 export default class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -31,7 +31,7 @@ export default class ErrorBoundary extends React.Component {
         <>
           <h1>ErrorBoundary: Something went wrong.</h1>
           <Router>
-            <Link to='/' onClick={this.clearError.bind(this)}>
+            <Link to="/" onClick={this.clearError.bind(this)}>
               Back Home
             </Link>
           </Router>

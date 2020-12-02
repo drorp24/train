@@ -16,7 +16,7 @@ L.Icon.Default.mergeOptions({
 const useStyles = makeStyles(theme => ({
   map: {
     height: '100%',
-    overflow: 'scroll',
+    overflow: 'hidden',
   },
 }))
 

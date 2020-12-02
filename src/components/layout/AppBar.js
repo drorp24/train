@@ -1,14 +1,14 @@
 import React from 'react'
 import { useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { toggleMode, toggleLang } from '../redux/app'
+import { toggleMode, toggleLang } from '../../redux/app'
 
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
-import Logout from './Logout'
+import Logout from '../Logout'
 import IconButton from '@material-ui/core/IconButton'
 import DarkIcon from '@material-ui/icons/Brightness4'
 import LightIcon from '@material-ui/icons/Brightness7'
@@ -16,7 +16,7 @@ import LangIcon from '@material-ui/icons/Language'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'absolute',
+    position: 'fixed',
     height: `${theme.appBarPortion}%`,
     display: 'flex',
     flexDirection: 'column',
@@ -46,10 +46,9 @@ const useStyles = makeStyles(theme => ({
     fontFamily: 'inherit',
   },
   lang: {
-    fontSize: '1rem',
+    fontSize: '0.75rem',
     position: 'absolute',
     top: '2.2rem',
-    color: '#999',
   },
 }))
 

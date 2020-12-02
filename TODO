@@ -1,6 +1,15 @@
+i18n:
+    ☐ implement i18n 
+layout:
+    ✔ make appbar a page property rather than in the component hierarchy @done(20-12-02 10:33)
+    ☐ add mobile-like app bar, covering list only
 Map:
+    ☐ check what geolocation info Shay currently gets. Can GoogleMaps be used instead
+    ☐ implement GoogleMaps if possible 
     ☐ marker clustering
 List:
-    ☐ generification
+    ✔ generification @done(20-12-02 08:48)
+    ✔ cardify entities @high @done(20-12-02 16:47)
+    ☐ tooltips
     ☐ cursor-based paging
     ☐ windowing

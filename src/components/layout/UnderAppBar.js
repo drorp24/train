@@ -1,24 +1,20 @@
 import React from 'react'
 
 import { makeStyles } from '@material-ui/core/styles'
-import Paper from '@material-ui/core/Paper'
 
 const useStyles = makeStyles(theme => ({
   under: {
     position: 'relative',
     top: `${theme.appBarPortion}%`,
     height: `${100 - theme.appBarPortion}%`,
+    width: '100%',
   },
 }))
 
-const UnderAppBar = ({ children, ...rest }) => {
+const UnderAppBar = ({ children }) => {
   const classes = useStyles()
 
-  return (
-    <Paper square elevation={1} className={classes.under}>
-      <div {...rest}>{children}</div>
-    </Paper>
-  )
+  return <div className={classes.under}>{children}</div>
 }
 
 export default UnderAppBar
