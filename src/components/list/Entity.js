@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { selectMerchantById } from '../../redux/merchants'
+import { GeoContext } from '../Home'
 
 import { ListConfig } from './List'
 
@@ -53,23 +55,26 @@ const getDraggableStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 })
 
-// ToDo: use createEntityAdapter / reselect / memoize / key to directly aceess rather than search with every drag
 const Entity = ({ id, index }) => {
-  const { mode, lang } = useSelector(store => store.app)
+  const { lang } = useSelector(store => store.app)
   const draggableId = String(id)
   const {
     selector,
     fields: { [lang]: lfields },
   } = useContext(ListConfig)
 
-  const entity = useSelector(store =>
-    store[selector].entities?.find(entity => entity.id === id)
-  )
+  const entity = useSelector(selectMerchantById(id))
 
   const [expanded, setExpanded] = useState(false)
 
+  const { map } = useContext(GeoContext)
+
   const handleExpandClick = () => {
     setExpanded(!expanded)
+  }
+
+  const handleLocateClick = ({ id, index }) => () => {
+    console.log('id, index: ', id, index)
   }
 
   if (entity && entity.position) {
@@ -114,7 +119,7 @@ const Entity = ({ id, index }) => {
             </Typography> */}
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton>
+            <IconButton onClick={handleLocateClick({ id, index })}>
               <RoomIcon />
             </IconButton>
             <IconButton>

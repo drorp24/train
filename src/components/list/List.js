@@ -39,7 +39,8 @@ const List = ({ listConfig, entities }) => {
   const onDragEnd = ({ draggableId, source, destination }) => {
     if (!destination || destination.index === source.index) return
 
-    dispatch(reorder({ draggableId, source, destination }))
+    // ToDo: fix
+    // dispatch(reorder({ draggableId, source, destination }))
   }
 
   return (

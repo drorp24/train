@@ -1,7 +1,7 @@
 // import React from 'react'
-import React, { useEffect } from 'react'
+import React, { useEffect, createContext } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { fetchMerchants } from '../redux/merchants'
+import { fetchMerchants, selectMerchants } from '../redux/merchants'
 
 import Page from './layout/Page'
 import List from './list/List'
@@ -17,6 +17,8 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
+export const GeoContext = createContext({ map: null, setMap: () => {} })
+
 const Home = () => {
   const listConfig = {
     // List component is generic
@@ -31,21 +33,27 @@ const Home = () => {
   const dispatch = useDispatch()
   // ToDo: 'reselect' or (better) createEntityAdapter
 
-  const { entities, loading, error } = useSelector(
-    state => state[listConfig.selector]
-  )
+  const { entities, loading, error } = useSelector(selectMerchants)
+  const { length } = entities
+
   // ToDo: check if apollo caches and de-dupes results
   useEffect(() => {
-    if (!entities.length) dispatch(fetchMerchants())
-  }, [dispatch, entities.length])
+    if (!length) dispatch(fetchMerchants())
+  }, [dispatch, length])
 
-  const { length } = entities
+  let map = { current: null }
+
+  const setMap = inputMap => {
+    map = inputMap
+  }
 
   return (
     <Page appBar {...{ loading, error, length }}>
       <div className={classes.home}>
-        <List {...{ listConfig, entities }} />
-        <Map />
+        <GeoContext.Provider value={{ map, setMap }}>
+          <List {...{ listConfig, entities }} />
+          <Map />
+        </GeoContext.Provider>
       </div>
     </Page>
   )

@@ -1,6 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+
+import { GeoContext } from './Home'
 
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -22,13 +24,14 @@ const useStyles = makeStyles(theme => ({
 
 const Map = () => {
   const classes = useStyles()
-
+  const { map, setMap } = useContext(GeoContext)
   return (
     <MapContainer
       center={[32.12504, 34.83082]}
       zoom={17}
       scrollWheelZoom={false}
       className={classes.map}
+      whenCreated={setMap}
     >
       <TileLayer
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

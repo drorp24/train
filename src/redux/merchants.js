@@ -1,6 +1,17 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import {
+  createAsyncThunk,
+  createSlice,
+  createEntityAdapter,
+} from '@reduxjs/toolkit'
 import { getMerchants } from '../api/useMerchants'
 
+// * normalizer
+const merchantsAdapter = createEntityAdapter({
+  selectId: merchant => merchant.id,
+  sortComparer: false, // maintain sort order following any CRUD operation
+})
+
+// * thunk
 export const fetchMerchants = createAsyncThunk(
   'merchants/fetchMerchants',
   async thunkAPI => {
@@ -13,11 +24,17 @@ export const fetchMerchants = createAsyncThunk(
   }
 )
 
+// * reducers / actions
+
+const initialState = merchantsAdapter.getInitialState({
+  loading: 'idle',
+})
+
 const merchantsSlice = createSlice({
   name: 'merchants',
-  initialState: { entities: [], loading: 'idle' },
+  initialState,
   reducers: {
-    clear: state => ({ ...state, entities: [] }),
+    clear: () => initialState,
     reorder: (state, { payload: { draggableId, source, destination } }) => {
       // Immer "mutation" to the rescue
       const [removed] = state.entities.splice(source.index, 1)
@@ -43,8 +60,7 @@ const merchantsSlice = createSlice({
       const { requestId } = action.meta
       if (state.loading === 'pending' && state.currentRequestId === requestId) {
         state.loading = 'idle'
-        action.payload &&
-          action.payload.forEach(entity => state.entities.push(entity))
+        merchantsAdapter.setAll(state, action.payload)
         state.currentRequestId = undefined
       }
     },
@@ -59,6 +75,20 @@ const merchantsSlice = createSlice({
     },
   },
 })
+
+// * selectors
+// memoized `reselect` selectors
+const merchantsSelectors = merchantsAdapter.getSelectors()
+
+// combine createEntityAdapter's ids/entities join (`selectAll`) with
+// createAsyncThunk's `loading` / `error` state into one object
+export const selectMerchants = ({ merchants }) => {
+  const entities = merchantsSelectors.selectAll(merchants)
+  const { loading, error } = merchants
+  return { entities, loading, error }
+}
+export const selectMerchantById = id => ({ merchants }) =>
+  merchantsSelectors.selectById(merchants, id)
 
 const { reducer, actions } = merchantsSlice
 export const { clear, reorder } = actions
