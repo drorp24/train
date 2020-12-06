@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { selectMerchantById } from '../../redux/merchants'
 import { GeoContext } from '../Home'
+import { marker } from '../Map'
 
 import { ListConfig } from './List'
 
@@ -55,34 +56,42 @@ const getDraggableStyle = (isDragging, draggableStyle) => ({
   ...draggableStyle,
 })
 
-const Entity = ({ id, index }) => {
-  const { lang } = useSelector(store => store.app)
-  const draggableId = String(id)
+const Entity = ({ entity, index }) => {
   const {
-    selector,
+    id,
+    location: { coordinates },
+    position,
+  } = entity
+  const { lang } = useSelector(store => store.app)
+  const {
     fields: { [lang]: lfields },
   } = useContext(ListConfig)
-
-  const entity = useSelector(selectMerchantById(id))
+  const draggableId = String(id)
 
   const [expanded, setExpanded] = useState(false)
 
-  const { map } = useContext(GeoContext)
+  const { geo } = useContext(GeoContext)
+
+  const handleLocateClick = () => {
+    const { map } = geo
+    const location = [coordinates[1], coordinates[0]]
+    const [firstLine, secondLine] = [entity[lfields[1]], entity[lfields[2]]]
+
+    map.flyTo(location)
+
+    marker(location)
+      .addTo(map)
+      .bindPopup(`<p><strong>${firstLine}</strong></p><p>${secondLine}</p>`)
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded)
   }
 
-  const handleLocateClick = ({ id, index }) => () => {
-    console.log('id, index: ', id, index)
-  }
-
-  if (entity && entity.position) {
-    const [from, to] = [
-      entity.position.source?.index,
-      entity.position.destination?.index,
-    ]
-    var direction = from < to ? 'down' : from > to ? 'up' : null
+  let direction
+  if (position) {
+    const [from, to] = [position.source?.index, position.destination?.index]
+    direction = from < to ? 'down' : from > to ? 'up' : null
   }
 
   const classes = useStyles({ direction })
@@ -119,7 +128,7 @@ const Entity = ({ id, index }) => {
             </Typography> */}
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton onClick={handleLocateClick({ id, index })}>
+            <IconButton onClick={handleLocateClick}>
               <RoomIcon />
             </IconButton>
             <IconButton>

@@ -17,7 +17,10 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export const GeoContext = createContext({ map: null, setMap: () => {} })
+export const GeoContext = createContext({
+  geo: { map: null },
+  setMap: () => {},
+})
 
 const Home = () => {
   const listConfig = {
@@ -41,16 +44,16 @@ const Home = () => {
     if (!length) dispatch(fetchMerchants())
   }, [dispatch, length])
 
-  let map = { current: null }
+  let geo = { map: null }
 
   const setMap = inputMap => {
-    map = inputMap
+    geo.map = inputMap
   }
 
   return (
     <Page appBar {...{ loading, error, length }}>
       <div className={classes.home}>
-        <GeoContext.Provider value={{ map, setMap }}>
+        <GeoContext.Provider value={{ geo, setMap }}>
           <List {...{ listConfig, entities }} />
           <Map />
         </GeoContext.Provider>

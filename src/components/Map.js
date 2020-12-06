@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import 'leaflet/dist/leaflet.css'
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
 
@@ -15,6 +15,8 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
 })
 
+export const marker = L.marker
+
 const useStyles = makeStyles(theme => ({
   map: {
     height: '100%',
@@ -23,8 +25,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Map = () => {
+  useEffect(() => {
+    console.log('Map re-rendered')
+  }, [])
   const classes = useStyles()
-  const { map, setMap } = useContext(GeoContext)
+  const { setMap } = useContext(GeoContext)
   return (
     <MapContainer
       center={[32.12504, 34.83082]}

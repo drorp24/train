@@ -29,7 +29,9 @@ const getDroppableStyle = isDraggingOver => ({
 export const ListConfig = createContext({ selector: 'none', fields: 'none' })
 
 const Entities = memo(({ entities }) =>
-  entities.map(({ id }, index) => <Entity key={id} {...{ id, index }} />)
+  entities.map((entity, index) => (
+    <Entity key={entity.id} {...{ entity, index }} />
+  ))
 )
 
 const List = ({ listConfig, entities }) => {
@@ -38,6 +40,8 @@ const List = ({ listConfig, entities }) => {
 
   const onDragEnd = ({ draggableId, source, destination }) => {
     if (!destination || destination.index === source.index) return
+
+    // ToDo: find out why dispatch(reorder) maps Map re-render
 
     dispatch(reorder({ draggableId, source, destination }))
   }
