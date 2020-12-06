@@ -2,10 +2,12 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
+  current,
 } from '@reduxjs/toolkit'
 import { getMerchants } from '../api/useMerchants'
 
-// * normalizer
+// * normalization
+// normalization enables to control the order as well as access entities by id
 const merchantsAdapter = createEntityAdapter({
   selectId: merchant => merchant.id,
   sortComparer: false, // maintain sort order following any CRUD operation
@@ -25,7 +27,6 @@ export const fetchMerchants = createAsyncThunk(
 )
 
 // * reducers / actions
-
 const initialState = merchantsAdapter.getInitialState({
   loading: 'idle',
 })
@@ -36,12 +37,13 @@ const merchantsSlice = createSlice({
   reducers: {
     clear: () => initialState,
     reorder: (state, { payload: { draggableId, source, destination } }) => {
-      // Immer "mutation" to the rescue
-      const [removed] = state.entities.splice(source.index, 1)
-      state.entities.splice(destination.index, 0, removed)
+      // reordering is achieved by manipulating the ids array (using Immer)
+      // console.log('current(state): ', current(state))
+      const [removed] = state.ids.splice(source.index, 1)
+      state.ids.splice(destination.index, 0, removed)
       const originalSource =
-        state.entities[destination.index].position?.source || source
-      state.entities[destination.index].position = {
+        state.entities[draggableId].position?.source || source
+      state.entities[draggableId].position = {
         draggableId,
         source: originalSource,
         destination,
@@ -77,11 +79,10 @@ const merchantsSlice = createSlice({
 })
 
 // * selectors
-// memoized `reselect` selectors
+// create memoized `reselect` selectors
 const merchantsSelectors = merchantsAdapter.getSelectors()
 
-// combine createEntityAdapter's ids/entities join (`selectAll`) with
-// createAsyncThunk's `loading` / `error` state into one object
+// add createAsyncThunk's loading/error states into createEntityAdapter's ids/entities join
 export const selectMerchants = ({ merchants }) => {
   const entities = merchantsSelectors.selectAll(merchants)
   const { loading, error } = merchants
