@@ -4,6 +4,7 @@ layout:
     ✔ make appbar a page property rather than in the component hierarchy @done(20-12-02 10:33)
     ☐ add mobile-like app bar, covering list only
 Map:
+    ✔ fix map re-rendering whenever list re-orders @done(20-12-08 12:57)
     ☐ check what geolocation info Shay currently gets. Can GoogleMaps be used instead
     ☐ implement GoogleMaps if possible 
     ☐ marker clustering

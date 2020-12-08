@@ -1,6 +1,5 @@
 import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { selectMerchantById } from '../../redux/merchants'
 import { GeoContext } from '../Home'
 import { marker } from '../Map'
 
@@ -74,12 +73,12 @@ const Entity = ({ entity, index }) => {
 
   const handleLocateClick = () => {
     const { map } = geo
-    const location = [coordinates[1], coordinates[0]]
+    const position = [coordinates[1], coordinates[0]]
     const [firstLine, secondLine] = [entity[lfields[1]], entity[lfields[2]]]
 
-    map.flyTo(location)
+    map.flyTo(position)
 
-    marker(location)
+    marker(position)
       .addTo(map)
       .bindPopup(`<p><strong>${firstLine}</strong></p><p>${secondLine}</p>`)
   }

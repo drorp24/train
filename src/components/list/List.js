@@ -1,7 +1,8 @@
-import React, { memo, createContext } from 'react'
-import { useDispatch } from 'react-redux'
-import { reorder } from '../../redux/merchants'
+import React, { memo, createContext, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchMerchants, selectMerchants, reorder } from '../../redux/merchants'
 
+import Load from '../layout/Load'
 import Entity from './Entity'
 
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
@@ -34,9 +35,14 @@ const Entities = memo(({ entities }) =>
   ))
 )
 
-const List = ({ listConfig, entities }) => {
+const List = ({ listConfig }) => {
+  const { entities, loading, error } = useSelector(selectMerchants)
+  const empty = !entities.length
+
   const dispatch = useDispatch()
-  const classes = useStyles()
+  useEffect(() => {
+    if (empty) dispatch(fetchMerchants())
+  }, [dispatch, empty])
 
   const onDragEnd = ({ draggableId, source, destination }) => {
     if (!destination || destination.index === source.index) return
@@ -46,27 +52,31 @@ const List = ({ listConfig, entities }) => {
     dispatch(reorder({ draggableId, source, destination }))
   }
 
+  const classes = useStyles()
+
   return (
     <Paper square elevation={5} className={classes.list}>
-      <ListConfig.Provider value={listConfig}>
-        <DragDropContext onDragEnd={onDragEnd}>
-          <Droppable droppableId="list">
-            {(
-              { innerRef, droppableProps, placeholder },
-              { isDraggingOver }
-            ) => (
-              <div
-                ref={innerRef}
-                style={getDroppableStyle(isDraggingOver)}
-                {...droppableProps}
-              >
-                <Entities {...{ entities }} />
-                {placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      </ListConfig.Provider>
+      <Load {...{ loading, error, empty }}>
+        <ListConfig.Provider value={listConfig}>
+          <DragDropContext onDragEnd={onDragEnd}>
+            <Droppable droppableId="list">
+              {(
+                { innerRef, droppableProps, placeholder },
+                { isDraggingOver }
+              ) => (
+                <div
+                  ref={innerRef}
+                  style={getDroppableStyle(isDraggingOver)}
+                  {...droppableProps}
+                >
+                  <Entities {...{ entities }} />
+                  {placeholder}
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </ListConfig.Provider>
+      </Load>
     </Paper>
   )
 }

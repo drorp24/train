@@ -1,6 +1,7 @@
 import { useQuery, gql } from '@apollo/client'
 import client from '../apollo/client'
 
+/*
 const LONG_QUERY = gql`
   query NearbyMerchants(
     $product: Product!
@@ -39,6 +40,7 @@ const LONG_QUERY = gql`
     }
   }
 `
+*/
 
 const SHORT_QUERY = gql`
   query NearbyMerchants(

@@ -1,7 +1,5 @@
 // import React from 'react'
-import React, { useEffect, createContext } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import { fetchMerchants, selectMerchants } from '../redux/merchants'
+import React, { createContext, useCallback } from 'react'
 
 import Page from './layout/Page'
 import List from './list/List'
@@ -19,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 
 export const GeoContext = createContext({
   geo: { map: null },
-  setMap: () => {},
+  setMap: null,
 })
 
 const Home = () => {
@@ -33,28 +31,22 @@ const Home = () => {
   }
 
   const classes = useStyles()
-  const dispatch = useDispatch()
   // ToDo: 'reselect' or (better) createEntityAdapter
-
-  const { entities, loading, error } = useSelector(selectMerchants)
-  const { length } = entities
-
-  // ToDo: check if apollo caches and de-dupes results
-  useEffect(() => {
-    if (!length) dispatch(fetchMerchants())
-  }, [dispatch, length])
 
   let geo = { map: null }
 
-  const setMap = inputMap => {
-    geo.map = inputMap
-  }
+  const setMap = useCallback(
+    inputMap => {
+      geo.map = inputMap
+    },
+    [geo.map]
+  )
 
   return (
-    <Page appBar {...{ loading, error, length }}>
+    <Page appBar>
       <div className={classes.home}>
         <GeoContext.Provider value={{ geo, setMap }}>
-          <List {...{ listConfig, entities }} />
+          <List {...{ listConfig }} />
           <Map />
         </GeoContext.Provider>
       </div>

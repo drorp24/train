@@ -1,6 +1,6 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import 'leaflet/dist/leaflet.css'
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { MapContainer, TileLayer } from 'react-leaflet'
 
 import { GeoContext } from './Home'
 
@@ -25,11 +25,9 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const Map = () => {
-  useEffect(() => {
-    console.log('Map re-rendered')
-  }, [])
   const classes = useStyles()
   const { setMap } = useContext(GeoContext)
+
   return (
     <MapContainer
       center={[32.12504, 34.83082]}
@@ -42,12 +40,6 @@ const Map = () => {
         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <Marker position={[32.12504, 34.83082]}>
-        <Popup>
-          A pretty CSS3 popup.
-          <br /> Easily customizable.
-        </Popup>
-      </Marker>
     </MapContainer>
   )
 }

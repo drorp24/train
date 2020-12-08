@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useSelector } from 'react-redux'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 // import ProtectedRoute from './components/layout/ProtectedRoute'
 import { ApolloProvider } from '@apollo/client'
 import client from './apollo/client'
+import { Helmet } from 'react-helmet'
 
 import SimulateError from './components/layout/SimulateError'
 import ErrorBoundary from './components/layout/ErrorBoundary'
@@ -21,15 +22,12 @@ export default function App() {
   const { mode, lang } = useSelector(store => store.app)
   const direction = lang === 'he' ? 'rtl' : 'ltr'
   const theme = useTheme(mode, direction)
-  console.log('theme: ', theme)
-  window.theme = theme
-
-  useEffect(() => {
-    document.body.setAttribute('dir', direction)
-  }, [direction])
 
   return (
     <>
+      <Helmet>
+        <body dir={direction} />
+      </Helmet>
       <ApolloProvider client={client}>
         <ThemeProvider theme={theme}>
           <CssBaseline />

@@ -2,12 +2,11 @@ import {
   createAsyncThunk,
   createSlice,
   createEntityAdapter,
-  current,
+  // current,
 } from '@reduxjs/toolkit'
 import { getMerchants } from '../api/useMerchants'
 
 // * normalization
-// normalization enables to control the order as well as access entities by id
 const merchantsAdapter = createEntityAdapter({
   selectId: merchant => merchant.id,
   sortComparer: false, // maintain sort order following any CRUD operation
@@ -82,7 +81,7 @@ const merchantsSlice = createSlice({
 // create memoized `reselect` selectors
 const merchantsSelectors = merchantsAdapter.getSelectors()
 
-// add createAsyncThunk's loading/error states into createEntityAdapter's ids/entities join
+// combine createAsyncThunk's loading/error states with createEntityAdapter's ids/entities join
 export const selectMerchants = ({ merchants }) => {
   const entities = merchantsSelectors.selectAll(merchants)
   const { loading, error } = merchants
