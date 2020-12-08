@@ -22,6 +22,7 @@ export default function App() {
   const { mode, lang } = useSelector(store => store.app)
   const direction = lang === 'he' ? 'rtl' : 'ltr'
   const theme = useTheme(mode, direction)
+  console.log('theme: ', theme)
 
   return (
     <>

@@ -7,7 +7,7 @@ import { ListConfig } from './List'
 
 import { Draggable } from 'react-beautiful-dnd'
 
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
 import clsx from 'clsx'
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward'
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward'
@@ -50,11 +50,6 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const getDraggableStyle = (isDragging, draggableStyle) => ({
-  ...(isDragging && { background: 'lightgreen' }),
-  ...draggableStyle,
-})
-
 const Entity = ({ entity, index }) => {
   const {
     id,
@@ -94,6 +89,14 @@ const Entity = ({ entity, index }) => {
   }
 
   const classes = useStyles({ direction })
+
+  const theme = useTheme()
+  const getDraggableStyle = (isDragging, draggableStyle) => {
+    return {
+      ...(isDragging && { background: theme.palette.primary[50] }),
+      ...draggableStyle,
+    }
+  }
 
   return (
     <Draggable {...{ draggableId, index }}>

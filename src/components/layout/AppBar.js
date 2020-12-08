@@ -16,12 +16,12 @@ import LangIcon from '@material-ui/icons/Language'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    position: 'fixed',
-    height: `${theme.appBarPortion}%`,
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
     flexGrow: 1,
+    height: '100%',
   },
   toolbar: {
     // uncomment to check alignment

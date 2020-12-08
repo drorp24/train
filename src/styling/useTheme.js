@@ -9,7 +9,11 @@ const useTheme = (type, direction) =>
   useMemo(
     () =>
       createMuiTheme({
-        appBarPortion: 6,
+        layout: {
+          appBarFr: 7,
+          sideFr: 25,
+          mainFr: 75,
+        },
         direction,
         palette: {
           type,
