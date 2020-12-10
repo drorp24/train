@@ -11,8 +11,8 @@ const useTheme = (type, direction) =>
       createMuiTheme({
         layout: {
           appBarFr: 7,
-          sideFr: 30,
-          mainFr: 70,
+          sideFr: 25,
+          mainFr: 85,
         },
         direction,
         palette: {

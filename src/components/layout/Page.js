@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import AppBar from './AppBar'
+import debounce from '../../utility/debounce'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -22,6 +23,7 @@ const useStyles = makeStyles(theme => {
     },
     appBar: {
       gridArea: 'appBar',
+      border: '1px solid #ddd',
     },
     side: {
       gridArea: 'side',
@@ -46,21 +48,33 @@ const useStyles = makeStyles(theme => {
 // Page handles loading, error & empty so its callers won't have to
 const Page = ({ appBar, side, main, children, ...rest }) => {
   const classes = useStyles()
+  const [appBarElevation, setAppBarElevation] = useState(0)
 
   // for some reason or another, setting the zIndex in the class hides the list
   const ref = useRef()
+  window.ref = ref
   useEffect(() => {
     ref.current.style.zIndex = 401
+  }, [])
+
+  const onScroll = debounce(() => {
+    setAppBarElevation(ref.current.scrollTop ? 3 : 0)
   })
 
   return (
     <Paper square className={classes.page} {...rest}>
       {appBar && (
         <div className={classes.appBar}>
-          <AppBar />
+          <AppBar elevation={appBarElevation} />
         </div>
       )}
-      <Paper square elevation={5} className={classes.side} ref={ref}>
+      <Paper
+        square
+        elevation={5}
+        className={classes.side}
+        ref={ref}
+        onScroll={onScroll}
+      >
         {side}
       </Paper>
       <div className={classes.main}>{main}</div>

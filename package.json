@@ -17,6 +17,7 @@
     "graphql": "^15.3.0",
     "jss-rtl": "^0.3.0",
     "leaflet": "^1.7.1",
+    "lodash.debounce": "^4.0.8",
     "react": "^16.13.1",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",

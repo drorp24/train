@@ -30,7 +30,7 @@ const Load = ({ loading, error, empty, children, ...rest }) => {
 
   return (
     <div className={classes.container} {...rest}>
-      <Content />
+      <Content {...rest} />
     </div>
   )
 }

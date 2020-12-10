@@ -53,7 +53,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar({ elevation }) {
   const { mode, lang } = useSelector(store => store.app)
   const dispatch = useDispatch()
   const changeMode = () => dispatch(toggleMode())
@@ -69,7 +69,7 @@ export default function ButtonAppBar() {
       : location.substring(1, 2).toUpperCase() + location.substring(2)
 
   return (
-    <AppBar className={classes.root}>
+    <AppBar elevation={elevation} className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <IconButton
           edge="start"
