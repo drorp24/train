@@ -16,6 +16,8 @@ import LangIcon from '@material-ui/icons/Language'
 
 const useStyles = makeStyles(theme => ({
   root: {
+    color: 'inherit',
+    backgroundColor: 'inherit',
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -39,7 +41,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: '1rem',
   },
   mode: {
-    color: 'white',
     display: 'flex',
     fontSize: '1rem',
     justifyContent: 'space-around',
@@ -68,7 +69,7 @@ export default function ButtonAppBar() {
       : location.substring(1, 2).toUpperCase() + location.substring(2)
 
   return (
-    <AppBar position="static" className={classes.root}>
+    <AppBar className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <IconButton
           edge="start"

@@ -29,6 +29,7 @@ const useStyles = makeStyles(theme => ({
   card: {
     margin: '1em',
     backgroundColor: theme.palette.background.paper,
+    borderRadius: '10px',
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -46,7 +47,9 @@ const useStyles = makeStyles(theme => ({
         ? theme.palette.up
         : direction === 'down'
         ? theme.palette.down
-        : '#ccc',
+        : 'inherit',
+    border: ({ direction }) =>
+      direction ? 'none' : `1px solid ${theme.palette.text.secondary}`,
   },
 }))
 
@@ -93,7 +96,10 @@ const Entity = ({ entity, index }) => {
   const theme = useTheme()
   const getDraggableStyle = (isDragging, draggableStyle) => {
     return {
-      ...(isDragging && { background: theme.palette.primary[50] }),
+      ...(isDragging && {
+        background: theme.palette.grey[400],
+        color: 'white',
+      }),
       ...draggableStyle,
     }
   }

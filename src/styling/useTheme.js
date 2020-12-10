@@ -11,13 +11,13 @@ const useTheme = (type, direction) =>
       createMuiTheme({
         layout: {
           appBarFr: 7,
-          sideFr: 25,
-          mainFr: 75,
+          sideFr: 30,
+          mainFr: 70,
         },
         direction,
         palette: {
           type,
-          primary: blue,
+          primary: { main: '#fff' },
           secondary: red,
           up: green[500],
           down: red[500],

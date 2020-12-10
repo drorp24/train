@@ -20,12 +20,9 @@ const useStyles = makeStyles(theme => ({
     textTransform: 'uppercase',
     color: theme.palette.secondary.light,
   },
-  loginButton: {
-    color: 'white',
-  },
+  loginButton: {},
   logoutButton: {
     fontSize: '1rem',
-    color: ({ username }) => (username ? 'white' : '#888 !important'),
   },
 }))
 
