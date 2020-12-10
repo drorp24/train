@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { ThemeProvider } from '@material-ui/core/styles'
+import useTheme from '../../styling/useTheme'
 import AppBar from './AppBar'
 import debounce from '../../utility/debounce'
 
@@ -23,7 +25,6 @@ const useStyles = makeStyles(theme => {
     },
     appBar: {
       gridArea: 'appBar',
-      border: '1px solid #ddd',
     },
     side: {
       gridArea: 'side',
@@ -33,8 +34,10 @@ const useStyles = makeStyles(theme => {
         display: 'none',
       },
       '-ms-overflow-style': 'none',
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: theme.palette.background.sideBar,
       // zIndex: 401, // hides the list
+      marginTop: `-${appBarFr}vh`,
+      paddingTop: `${appBarFr}vh`,
     },
     main: {
       gridArea: 'main',
@@ -49,6 +52,7 @@ const useStyles = makeStyles(theme => {
 const Page = ({ appBar, side, main, children, ...rest }) => {
   const classes = useStyles()
   const [appBarElevation, setAppBarElevation] = useState(0)
+  const theme = useTheme('light')
 
   // for some reason or another, setting the zIndex in the class hides the list
   const ref = useRef()
@@ -64,9 +68,11 @@ const Page = ({ appBar, side, main, children, ...rest }) => {
   return (
     <Paper square className={classes.page} {...rest}>
       {appBar && (
-        <div className={classes.appBar}>
-          <AppBar elevation={appBarElevation} />
-        </div>
+        <ThemeProvider theme={theme}>
+          <div className={classes.appBar}>
+            <AppBar elevation={appBarElevation} />
+          </div>
+        </ThemeProvider>
       )}
       <Paper
         square

@@ -16,8 +16,7 @@ import LangIcon from '@material-ui/icons/Language'
 
 const useStyles = makeStyles(theme => ({
   root: {
-    color: 'inherit',
-    backgroundColor: 'inherit',
+    backgroundColor: theme.palette.background.sideBar,
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
@@ -31,9 +30,6 @@ const useStyles = makeStyles(theme => ({
     //   border: '1px solid',
     //   borderRadius: 0,
     // },
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
@@ -72,8 +68,7 @@ export default function ButtonAppBar({ elevation }) {
     <AppBar elevation={elevation} className={classes.root}>
       <Toolbar className={classes.toolbar}>
         <IconButton
-          edge="start"
-          className={classes.menuButton}
+          edge={lang === 'he' ? 'end' : 'start'}
           color="inherit"
           aria-label="menu"
         >

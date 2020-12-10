@@ -44,9 +44,9 @@ const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: ({ direction }) =>
       direction === 'up'
-        ? theme.palette.up
+        ? theme.palette.shuffle.up
         : direction === 'down'
-        ? theme.palette.down
+        ? theme.palette.shuffle.down
         : 'inherit',
     border: ({ direction }) =>
       direction ? 'none' : `1px solid ${theme.palette.text.secondary}`,
