@@ -1,8 +1,10 @@
+SWR:
+    ☐ implement SWR, to save on load times every time page is reloaded after an hour
 i18n:
     ☐ implement i18n 
 layout:
     ✔ make appbar a page property rather than in the component hierarchy @done(20-12-02 10:33)
-    ☐ add mobile-like app bar, covering list only
+    ✔ add mobile-like app bar, covering list only @done(20-12-15 11:23)
 Map:
     ✔ fix map re-rendering whenever list re-orders @done(20-12-08 12:57)
     ☐ check what geolocation info Shay currently gets. Can GoogleMaps be used instead
@@ -14,3 +16,5 @@ List:
     ☐ tooltips
     ☐ cursor-based paging
     ☐ windowing
+D&D:
+    ☐ fix flickering and page re-rendering when filterBar is d&d

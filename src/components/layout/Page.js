@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { reorder } from '../../redux/merchants'
-import { positionFilters } from '../../redux/app'
 
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
@@ -12,17 +10,18 @@ import Paper from '@material-ui/core/Paper'
 import AppBar from '@material-ui/core/AppBar'
 
 import MenuBar from './MenuBar'
-import FiltersBar from './FiltersBar'
+import Filters from './Filters'
 import FloatingBar from './FloatingBar'
 
 import debounce from '../../utility/debounce'
+import { onDragEnd } from '../../utility/dragAndDrop'
 
 const useStyles = makeStyles(theme => {
   const {
-    layout: { menuBarHeight, filtersBarHeight, sideBarWidth },
+    layout: { menuBarHeight, toolBarHeight, sideBarWidth },
   } = theme
 
-  const toolbarsHeight = menuBarHeight + filtersBarHeight
+  const toolbarsHeight = menuBarHeight + toolBarHeight
   const sideBarHeight = 100 - toolbarsHeight
   const mainWidth = 100 - sideBarWidth
   return {
@@ -30,13 +29,13 @@ const useStyles = makeStyles(theme => {
       height: '100vh',
       display: 'grid',
       gridTemplateColumns: `${sideBarWidth}fr ${mainWidth}fr`,
-      gridTemplateRows: ({ filtersBarPosition }) =>
+      gridTemplateRows: ({ filtersPosition }) =>
         `${menuBarHeight}fr ${
-          filtersBarPosition === 'filtersBar' ? filtersBarHeight : 0
+          filtersPosition === 'toolBar' ? toolBarHeight : 0
         }fr ${sideBarHeight}fr`,
       gridTemplateAreas: `
       'menuBar main'
-      'filtersBar main'
+      'toolBar main'
       'side main'
     `,
     },
@@ -44,8 +43,8 @@ const useStyles = makeStyles(theme => {
       gridArea: 'menuBar',
       position: 'relative',
     },
-    filtersAppBar: {
-      gridArea: 'filtersBar',
+    toolBar: {
+      gridArea: 'toolBar',
       zIndex: '402',
       position: 'relative',
       borderRadius: theme.layout.borderRadius,
@@ -84,14 +83,14 @@ const useStyles = makeStyles(theme => {
 })
 
 const Page = ({ menuBar, filtersBar, sideBar, main, children, ...rest }) => {
-  const filtersBarPosition = useSelector(store => store.app.filters)
+  const filtersPosition = useSelector(store => store.app.filters)
   const dispatch = useDispatch()
 
   const [menuBarElevation, setMenuBarElevation] = useState(0)
-  const [filtersBarElevation, setFiltersBarElevation] = useState(0)
+  const [toolBarElevation, setToolBarElevation] = useState(0)
   const [isFiltersDragging, setIsFiltersDragging] = useState(false)
 
-  const classes = useStyles({ filtersBarPosition, isFiltersDragging })
+  const classes = useStyles({ filtersPosition, isFiltersDragging })
 
   const theme = useTheme('light')
 
@@ -103,41 +102,16 @@ const Page = ({ menuBar, filtersBar, sideBar, main, children, ...rest }) => {
   }, [])
 
   const onScroll = debounce(() => {
-    if (filtersBarPosition === 'filtersBar') {
-      setFiltersBarElevation(ref.current.scrollTop ? 3 : 0)
+    if (filtersPosition === 'toolBar') {
+      setToolBarElevation(ref.current.scrollTop ? 3 : 0)
     } else {
       setMenuBarElevation(ref.current.scrollTop ? 3 : 0)
     }
   })
 
-  const onDragEnd = ({ draggableId, source, destination }) => {
-    console.log('source: ', source)
-    console.log('destination: ', destination)
-    console.log('draggableId: ', draggableId)
-    if (
-      !destination ||
-      (source.droppableId === 'list' && destination.droppableId !== 'list') ||
-      (source.droppableId === 'list' && destination.index === source.index)
-    )
-      return
-
-    if (source.droppableId === 'list' && destination.droppableId === 'list') {
-      dispatch(reorder({ draggableId, source, destination }))
-    }
-
-    if (source.droppableId === 'filtersBar') {
-      if (destination.droppableId === 'list') return
-      dispatch(positionFilters(destination.droppableId))
-    }
-
-    if (source.droppableId === 'floatingBar') {
-      dispatch(positionFilters('filtersBar'))
-    }
-  }
-
   return (
     <Paper square className={classes.page} {...rest}>
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={onDragEnd(dispatch)}>
         {menuBar && (
           <ThemeProvider theme={theme}>
             <AppBar elevation={menuBarElevation} className={classes.menuBar}>
@@ -146,49 +120,48 @@ const Page = ({ menuBar, filtersBar, sideBar, main, children, ...rest }) => {
           </ThemeProvider>
         )}
         {filtersBar && (
-          <Droppable
-            droppableId="filtersBar"
-            style={{ border: '5px solid green' }}
-          >
+          <Droppable droppableId="toolBar">
             {(
               { innerRef, droppableProps, placeholder },
               { isDraggingOver }
-            ) => (
-              <div ref={innerRef} {...droppableProps}>
-                <Draggable draggableId="draggableFilter" index={0}>
-                  {(
-                    { innerRef, draggableProps, dragHandleProps },
-                    { isDragging }
-                  ) => {
-                    setIsFiltersDragging(isDragging)
-                    return (
-                      <div
-                        ref={innerRef}
-                        {...draggableProps}
-                        {...dragHandleProps}
-                      >
-                        <AppBar
-                          elevation={
-                            isFiltersDragging ? 5 : filtersBarElevation
-                          }
-                          className={classes.filtersAppBar}
+            ) => {
+              console.log('isDraggingOver: ', isDraggingOver)
+              return (
+                <div ref={innerRef} {...droppableProps}>
+                  <Draggable draggableId="filters" index={0}>
+                    {(
+                      { innerRef, draggableProps, dragHandleProps },
+                      { isDragging }
+                    ) => {
+                      // setIsFiltersDragging(isDragging)
+                      return (
+                        <div
+                          ref={innerRef}
+                          {...draggableProps}
+                          {...dragHandleProps}
                         >
-                          <FiltersBar
-                            style={{
-                              display:
-                                filtersBarPosition === 'filtersBar'
-                                  ? 'flex'
-                                  : 'none',
-                            }}
-                          />
-                        </AppBar>
-                      </div>
-                    )
-                  }}
-                </Draggable>
-                {placeholder}
-              </div>
-            )}
+                          <AppBar
+                            elevation={isFiltersDragging ? 5 : toolBarElevation}
+                            className={classes.filtersAppBar}
+                            position="relative"
+                          >
+                            <Filters
+                              style={{
+                                display:
+                                  filtersPosition === 'toolBar'
+                                    ? 'flex'
+                                    : 'none',
+                              }}
+                            />
+                          </AppBar>
+                        </div>
+                      )
+                    }}
+                  </Draggable>
+                  {placeholder}
+                </div>
+              )
+            }}
           </Droppable>
         )}
         <Paper

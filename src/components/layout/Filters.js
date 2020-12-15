@@ -25,7 +25,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const FiltersBar = ({ style }) => {
+const Filters = ({ style }) => {
   const { lang } = useSelector(store => store.app)
   const classes = useStyles({ lang })
 
@@ -64,4 +64,4 @@ const FiltersBar = ({ style }) => {
   )
 }
 
-export default FiltersBar
+export default Filters
