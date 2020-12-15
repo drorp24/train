@@ -28,9 +28,18 @@ const Home = () => {
     [geo.map]
   )
 
+  // ToDo: pass entire component for both menuBar and filterBar, not just boolean indication; just as sideBar and main.
+  // ToDo: and remove their logic from Page
+  // ToDo: extract out the draggable/droppable containers
+
   return (
     <GeoContext.Provider value={{ geo, setMap }}>
-      <Page appBar side={<List {...{ listConfig }} />} main={<Map />} />
+      <Page
+        menuBar
+        filtersBar
+        sideBar={<List {...{ listConfig }} />}
+        main={<Map />}
+      />
     </GeoContext.Provider>
   )
 }

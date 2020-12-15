@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { GeoContext } from '../Home'
 import { marker } from '../Map'
+import sliceCountry from '../../utility/sliceCountry'
 
 import { ListConfig } from './List'
 
@@ -27,9 +28,9 @@ import DomainIcon from '@material-ui/icons/Domain'
 
 const useStyles = makeStyles(theme => ({
   card: {
-    margin: '1em',
+    marginBottom: theme.layout.listItemMargin,
     backgroundColor: theme.palette.background.paper,
-    borderRadius: '10px',
+    borderRadius: theme.layout.borderRsdius,
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -40,6 +41,9 @@ const useStyles = makeStyles(theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+  },
+  content: {
+    display: 'none',
   },
   avatar: {
     backgroundColor: ({ direction }) =>
@@ -128,9 +132,13 @@ const Entity = ({ entity, index }) => {
               </IconButton>
             }
             title={entity[lfields[1]]}
-            subheader={entity[lfields[2]]}
+            subheader={
+              lang === 'he'
+                ? entity[lfields[2]]
+                : sliceCountry(entity[lfields[2]])
+            }
           />
-          <CardContent>
+          <CardContent className={classes.content}>
             {/* <Typography variant="body2" color="textSecondary" component="p">
               Some more content...
             </Typography> */}

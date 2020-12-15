@@ -10,9 +10,12 @@ const useTheme = (type, direction) =>
     () =>
       createMuiTheme({
         layout: {
-          appBarFr: 7,
-          sideFr: 25,
-          mainFr: 85,
+          menuBarHeight: 10,
+          filtersBarHeight: 10,
+          sideBarWidth: 30,
+          borderRadius: '10px',
+          sideBarPadding: '1rem',
+          listItemMargin: '0.5rem',
         },
         direction,
         palette: {

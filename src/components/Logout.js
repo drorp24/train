@@ -30,6 +30,7 @@ const Logout = () => {
   const username = useSelector(store => store.users.loggedIn.username)
   const dispatch = useDispatch()
   const history = useHistory()
+  const { lang } = useSelector(store => store.app)
   const classes = useStyles({ username })
 
   const performLogout = () => {
@@ -52,6 +53,7 @@ const Logout = () => {
 
       <IconButton
         className={classes.logoutButton}
+        edge={lang === 'en' ? 'end' : 'start'}
         onClick={performLogout}
         disabled={!username}
       >
