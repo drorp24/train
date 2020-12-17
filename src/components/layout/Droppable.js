@@ -1,7 +1,9 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 
 import { Droppable } from 'react-beautiful-dnd'
 
+import Filters from './Filters'
+import debounce from '../../utility/debounce'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 
 const useStyles = makeStyles(theme => ({
@@ -10,38 +12,37 @@ const useStyles = makeStyles(theme => ({
 
 const MyDroppable = ({
   droppableId,
-  styleWhileDraggingOver,
+  droppableWhileDraggingOver,
+  draggableWhileDragging,
   children,
   ...rest
 }) => {
   const classes = useStyles()
   const theme = useTheme()
 
-  const getDroppableStyle = isDraggingOver => ({
+  const getDroppableStyle = debounce(isDraggingOver => ({
     height: '100%',
     width: '100%',
     ...(isDraggingOver && {
-      ...(styleWhileDraggingOver ||
+      ...(droppableWhileDraggingOver ||
         theme.interaction.droppableWhileDraggingOver),
     }),
-  })
+  }))
 
+  // if toolbar ever contains more than one bar, iterate over them
+  // currently it includes 'Filters' only hence it is hard - coded
   return (
     <Droppable
       droppableId={droppableId}
-      renderClone={(provided, snapshot, rubric) => {
-        console.log('snapshot: ', snapshot)
-        console.log('rubric: ', rubric)
-        return (
-          <div
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            ref={provided.innerRef}
-          >
-            I am clone
-          </div>
-        )
-      }}
+      renderClone={(
+        { draggableProps, dragHandleProps, innerRef },
+        { isDragging },
+        { draggableId }
+      ) => (
+        <div {...draggableProps} {...dragHandleProps} ref={innerRef}>
+          <Filters {...{ isDragging }} />
+        </div>
+      )}
     >
       {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
         <div

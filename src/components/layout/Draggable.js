@@ -11,24 +11,19 @@ const useStyles = makeStyles(theme => ({
 const MyDraggable = ({
   draggableId,
   index,
-  styleWhileDragging,
+  draggableWhileDragging,
   children,
   ...rest
 }) => {
   const classes = useStyles()
   const theme = useTheme()
 
-  const getDraggableStyle = (isDragging, draggablePropsStyle) => {
-    return {
-      ...(isDragging && {
-        ...(styleWhileDragging || theme.interaction.draggableWhileDragging),
-      }),
-      ...draggablePropsStyle,
-    }
-  }
-
-  // ToDo: record 'isDragging' (debounced) in redux
-  // so all valid droppables can respond with droppableWhileDragging style
+  const getDraggableStyle = (isDragging, draggablePropsStyle) => ({
+    ...(isDragging && {
+      ...(draggableWhileDragging || theme.interaction.draggableWhileDragging),
+    }),
+    ...draggablePropsStyle,
+  })
 
   return (
     <Draggable {...{ draggableId, index }} className={classes.root} {...rest}>

@@ -5,7 +5,7 @@ const debounce = fn => _debounce(fn, 60, { leading: true })
 
 export default debounce
 
-const throttleByFrame = fn => {
+export const throttleByFrame = fn => {
   // This holds the requestAnimationFrame reference, so we can cancel it if we wish
   let frame
 

@@ -32,8 +32,6 @@ const useStyles = makeStyles(theme => {
       gridTemplateRows: '1fr',
     },
     sideBar: {
-      // display: 'none',
-      // gridArea: 'side',
       overflow: 'scroll',
       scrollbarWidth: 'none',
       '&::-webkit-scrollbar': {
@@ -49,24 +47,24 @@ const useStyles = makeStyles(theme => {
       backgroundColor: theme.palette.background.sideBar,
     },
     menuBar: {
-      // gridArea: 'menuBar',
+      height: `${theme.layout.menuBarHeight}vh`,
       position: 'relative',
     },
     toolBar: {
-      // gridArea: 'toolBar',
+      // height: /* `${theme.layout.toolBarHeight}vh` */ 0,
+      height: ({ draggableBars }) =>
+        draggableBars.length ? `${theme.layout.toolBarHeight}vh` : 0,
       zIndex: '402',
       position: 'relative',
       borderRadius: theme.layout.borderRadius,
     },
     list: {
-      // gridArea: 'list',
-      marginTop: ({ draggables }) =>
-        draggables.length ? `${barsHeight}vh` : `${menuBarHeight}vh`,
+      marginTop: ({ draggableBars }) =>
+        draggableBars.length ? `${barsHeight}vh` : `${menuBarHeight}vh`,
       padding: theme.layout.sideBarPadding,
       transition: 'margin-top 0.2s',
     },
     map: {
-      // gridArea: 'map',
       height: '100%',
       width: '100%',
     },
@@ -79,9 +77,7 @@ const useStyles = makeStyles(theme => {
       //   isFiltersDragging ? '3px dashed' : 'inherit',
       borderRadius: theme.layout.borderRadius,
     },
-    children: {
-      // gridArea: 'children',
-    },
+    children: {},
   }
 })
 
@@ -91,8 +87,8 @@ const Page = ({ menuBar, toolBar, list, map, children, ...rest }) => {
   const ref = useRef()
   const theme = useTheme('light')
 
-  const draggables = useSelector(store => store.app.toolBar)
-  const classes = useStyles({ draggables })
+  const draggableBars = useSelector(store => store.app.toolBar)
+  const classes = useStyles({ draggableBars })
 
   const onScroll = debounce(() => {
     setToolbarElevation(ref.current.scrollTop ? 3 : 0)
@@ -119,7 +115,7 @@ const Page = ({ menuBar, toolBar, list, map, children, ...rest }) => {
               </ThemeProvider>
               {toolBar && (
                 <div className={classes.toolBar}>
-                  <ToolBar {...{ draggables }} />
+                  <ToolBar {...{ draggableBars }} />
                 </div>
               )}
             </AppBar>

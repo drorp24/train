@@ -10,27 +10,25 @@ const useStyles = makeStyles(theme => ({
   root: {},
 }))
 
-const ToolBar = ({ draggables }) => {
+const ToolBar = ({ draggableBars }) => {
   const droppableId = 'toolBar'
 
   const classes = useStyles()
 
   return (
-    <div className={classes.root}>
-      <Droppable {...{ droppableId }}>
-        {draggables.map((draggableId, index) => {
-          const Component = draggableComponent(draggableId)
-          return (
-            <Draggable
-              {...{ draggableId, index }}
-              key={`${droppableId} ${draggableId}}`}
-            >
-              <Component />
-            </Draggable>
-          )
-        })}
-      </Droppable>
-    </div>
+    <Droppable {...{ droppableId }}>
+      {draggableBars.map((draggableId, index) => {
+        const Component = draggableComponent(draggableId)
+        return (
+          <Draggable
+            {...{ draggableId, index }}
+            key={`${droppableId} ${draggableId}}`}
+          >
+            <Component />
+          </Draggable>
+        )
+      })}
+    </Droppable>
   )
 }
 

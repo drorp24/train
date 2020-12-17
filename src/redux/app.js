@@ -5,7 +5,6 @@ const appSlice = createSlice({
   initialState: {
     mode: 'light',
     lang: 'en',
-    filters: 'toolBar',
     toolBar: ['filters'],
     floatingBar: [],
   },
@@ -18,26 +17,13 @@ const appSlice = createSlice({
       ...state,
       lang: state.lang === 'en' ? 'he' : 'en',
     }),
-    relocate: (
-      state,
-      {
-        payload: {
-          draggableId,
-          source,
-          destination: { droppableId },
-        },
-      }
-    ) => ({
-      ...state,
-      [draggableId]: droppableId,
-    }),
-    relocate1: (state, { payload: { draggableId, source, destination } }) => {
-      // pseudo-mutating using Immer
+    relocate: (state, { payload: { draggableId, source, destination } }) => {
+      // pseudo-mutation, Immer style
       state[source.droppableId] = state[source.droppableId]?.filter(
         draggable => draggable !== draggableId
       )
       if (destination.droppableId === 'list')
-        destination.droppableId = 'toolBar' // when user returns the floating bar to place, it frequently hits 'list'
+        destination.droppableId = 'toolBar' // user occasionally misses the 'toolbar' droppable, hitting 'list' instead
       state[destination.droppableId].push(draggableId)
     },
   },
@@ -46,4 +32,4 @@ const appSlice = createSlice({
 const { actions, reducer } = appSlice
 
 export default reducer
-export const { toggleMode, toggleLang, relocate, relocate1 } = actions
+export const { toggleMode, toggleLang, relocate } = actions

@@ -1,21 +1,12 @@
-import React from 'react'
+import React, { Memo } from 'react'
 import { useSelector } from 'react-redux'
+
+import Bar from './Bar'
 
 import { makeStyles } from '@material-ui/core/styles'
 import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles(theme => ({
-  filtersBar: {
-    padding: theme.layout.sideBarPadding,
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    '& > *': {
-      margin: theme.spacing(0.5),
-    },
-    borderRadius: theme.layout.borderRadius,
-    flexWrap: 'wrap',
-  },
   chip: {
     backgroundColor: theme.palette.background.paper,
   },
@@ -24,7 +15,9 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-const Filters = ({ style }) => {
+// ToDo: find out why Memo throws and fix it
+// else this component would be re-rendered hundres of times each second
+const Filters = ({ isDragging }) => {
   const { lang } = useSelector(store => store.app)
   const classes = useStyles({ lang })
 
@@ -37,7 +30,7 @@ const Filters = ({ style }) => {
   }
 
   return (
-    <div style={style} className={classes.filtersBar}>
+    <Bar {...{ isDragging }}>
       <Chip
         label="Filter A"
         onClick={handleClick}
@@ -59,7 +52,7 @@ const Filters = ({ style }) => {
         className={classes.chip}
         classes={{ deleteIcon: classes.deleteIcon }}
       />
-    </div>
+    </Bar>
   )
 }
 
