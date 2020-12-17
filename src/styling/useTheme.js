@@ -32,12 +32,15 @@ const useTheme = (type, direction) =>
           },
         },
         interaction: {
-          droppableHint: {
+          droppableWhileDraggingOver: {
             border: `5px solid ${lightBlue[500]}`,
           },
           draggableWhileDragging: {
             background: grey[400],
             color: 'white',
+          },
+          droppableWhileDragging: {
+            border: `5px solid ${lightBlue[500]}`,
           },
         },
       }),

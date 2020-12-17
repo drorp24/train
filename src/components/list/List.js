@@ -33,7 +33,7 @@ const List = ({ listConfig }) => {
   return (
     <Load {...{ loading, error, empty }}>
       <ListConfig.Provider value={listConfig}>
-        <Droppable droppableId="list" style={{ border: '5px solid orange' }}>
+        <Droppable droppableId="list">
           {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
             <div
               ref={innerRef}

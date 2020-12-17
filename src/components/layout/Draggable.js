@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import React from 'react'
 
 import { Draggable } from 'react-beautiful-dnd'
 
@@ -8,47 +8,42 @@ const useStyles = makeStyles(theme => ({
   root: {},
 }))
 
-const MyDraggable = forwardRef(
-  (
-    {
-      source: { droppableId, index } = { index: 0 },
-      draggableId,
-      destinations,
-      styleWhileDragging,
-      children,
-      ...rest
-    },
-    ref
-  ) => {
-    console.log('at Draggable. ref: ', ref)
+const MyDraggable = ({
+  draggableId,
+  index,
+  styleWhileDragging,
+  children,
+  ...rest
+}) => {
+  const classes = useStyles()
+  const theme = useTheme()
 
-    const classes = useStyles()
-    const theme = useTheme()
-
-    const getDraggableStyle = (isDragging, draggablePropsStyle) => {
-      return {
-        ...(isDragging && {
-          ...(styleWhileDragging || theme.interaction.draggableWhileDragging),
-        }),
-        ...draggablePropsStyle,
-      }
+  const getDraggableStyle = (isDragging, draggablePropsStyle) => {
+    return {
+      ...(isDragging && {
+        ...(styleWhileDragging || theme.interaction.draggableWhileDragging),
+      }),
+      ...draggablePropsStyle,
     }
-
-    return (
-      <Draggable {...{ draggableId, index }} className={classes.root} {...rest}>
-        {({ innerRef, draggableProps, dragHandleProps }, { isDragging }) => (
-          <div
-            ref={innerRef}
-            {...draggableProps}
-            {...dragHandleProps}
-            style={getDraggableStyle(isDragging, draggableProps.style)}
-          >
-            {children}
-          </div>
-        )}
-      </Draggable>
-    )
   }
-)
+
+  // ToDo: record 'isDragging' (debounced) in redux
+  // so all valid droppables can respond with droppableWhileDragging style
+
+  return (
+    <Draggable {...{ draggableId, index }} className={classes.root} {...rest}>
+      {({ innerRef, draggableProps, dragHandleProps }, { isDragging }) => (
+        <div
+          ref={innerRef}
+          {...draggableProps}
+          {...dragHandleProps}
+          style={getDraggableStyle(isDragging, draggableProps.style)}
+        >
+          {children}
+        </div>
+      )}
+    </Draggable>
+  )
+}
 
 export default MyDraggable

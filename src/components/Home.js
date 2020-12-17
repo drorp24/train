@@ -34,12 +34,7 @@ const Home = () => {
 
   return (
     <GeoContext.Provider value={{ geo, setMap }}>
-      <Page
-        menuBar
-        filtersBar
-        sideBar={<List {...{ listConfig }} />}
-        main={<Map />}
-      />
+      <Page menuBar toolBar list={<List {...{ listConfig }} />} map={<Map />} />
     </GeoContext.Provider>
   )
 }

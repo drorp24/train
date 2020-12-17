@@ -8,38 +8,55 @@ const useStyles = makeStyles(theme => ({
   root: {},
 }))
 
-const MyDroppable = forwardRef(
-  ({ droppableId, styleWhileDraggingOver, children, ...rest }, ref) => {
-    console.log('at MyDroppable. ref: ', ref)
-    const classes = useStyles()
-    const theme = useTheme()
+const MyDroppable = ({
+  droppableId,
+  styleWhileDraggingOver,
+  children,
+  ...rest
+}) => {
+  const classes = useStyles()
+  const theme = useTheme()
 
-    const getDroppableStyle = isDraggingOver => ({
-      height: '100%',
-      width: '100%',
-      ...(isDraggingOver && {
-        ...(styleWhileDraggingOver || theme.interaction.droppableHint),
-      }),
-    })
+  const getDroppableStyle = isDraggingOver => ({
+    height: '100%',
+    width: '100%',
+    ...(isDraggingOver && {
+      ...(styleWhileDraggingOver ||
+        theme.interaction.droppableWhileDraggingOver),
+    }),
+  })
 
-    return (
-      <Droppable droppableId={droppableId} className={classes.root} {...rest}>
-        {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => {
-          console.log('placeholder: ', placeholder)
-          return (
-            <div
-              ref={innerRef}
-              style={getDroppableStyle(isDraggingOver)}
-              {...droppableProps}
-            >
-              {children}
-              {placeholder}
-            </div>
-          )
-        }}
-      </Droppable>
-    )
-  }
-)
+  return (
+    <Droppable
+      droppableId={droppableId}
+      renderClone={(provided, snapshot, rubric) => {
+        console.log('snapshot: ', snapshot)
+        console.log('rubric: ', rubric)
+        return (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+          >
+            I am clone
+          </div>
+        )
+      }}
+    >
+      {({ innerRef, droppableProps, placeholder }, { isDraggingOver }) => (
+        <div
+          ref={innerRef}
+          {...droppableProps}
+          style={getDroppableStyle(isDraggingOver)}
+          className={classes.root}
+          {...rest}
+        >
+          {children}
+          {placeholder}
+        </div>
+      )}
+    </Droppable>
+  )
+}
 
 export default MyDroppable

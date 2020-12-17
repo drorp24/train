@@ -6,16 +6,15 @@ import Chip from '@material-ui/core/Chip'
 
 const useStyles = makeStyles(theme => ({
   filtersBar: {
-    backgroundColor: theme.palette.background.sideBar,
     padding: theme.layout.sideBarPadding,
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    flexWrap: 'wrap',
     '& > *': {
       margin: theme.spacing(0.5),
     },
     borderRadius: theme.layout.borderRadius,
+    flexWrap: 'wrap',
   },
   chip: {
     backgroundColor: theme.palette.background.paper,

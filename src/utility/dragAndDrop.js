@@ -1,5 +1,5 @@
 // d&d configuration
-import { relocate } from '../redux/app'
+import { relocate, relocate1 } from '../redux/app'
 import { reorder } from '../redux/merchants'
 
 import Entity from '../../src/components/list/Entity'
@@ -22,12 +22,12 @@ const droppable = {
   },
   toolBar: {
     destinations: ['floatingBar'],
-    action: relocate,
+    action: relocate1,
     draggables: ['filters'],
   },
   floatingBar: {
-    destinations: ['toolBar'],
-    action: relocate,
+    destinations: ['toolBar', 'list'],
+    action: relocate1,
     draggables: ['filters'],
   },
 }

@@ -1,3 +1,8 @@
+D&D:
+    ☐ use cloning API for the floating bar
+    ☐ rename 'list' droppable to 'merchant' to allow for more lists, remove 'filters' selector and replace 'relocate' action/reducer
+    ☐ fix flickering and page re-rendering when filterBar is d&d
+    ☐ integrate rbd with react-window (virtual list)
 SWR:
     ☐ implement SWR, to save on load times every time page is reloaded after an hour
 i18n:
@@ -16,5 +21,3 @@ List:
     ☐ tooltips
     ☐ cursor-based paging
     ☐ windowing
-D&D:
-    ☐ fix flickering and page re-rendering when filterBar is d&d

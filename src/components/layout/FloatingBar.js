@@ -19,13 +19,11 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const FloatingBar = () => {
-  const classes = useStyles()
   const droppableId = 'floatingBar'
-  const draggables = useSelector(store =>
-    Object.entries(store.app)
-      .filter(([key, value]) => value === 'floatingBar')
-      .map(item => item[0])
-  )
+  const draggables = useSelector(store => store.app[droppableId])
+
+  const classes = useStyles()
+
   const empty = !draggables.length
 
   return (
@@ -36,10 +34,13 @@ const FloatingBar = () => {
         className={classes.appBar}
         style={{ visibility: empty ? 'hidden' : 'visible' }}
       >
-        {draggables.map(draggableId => {
+        {draggables.map((draggableId, index) => {
           const Component = draggableComponent(draggableId)
           return (
-            <Draggable draggableId={draggableId} key={draggableId}>
+            <Draggable
+              {...{ draggableId, index }}
+              key={`${droppableId} ${draggableId}}`}
+            >
               <Component />
             </Draggable>
           )

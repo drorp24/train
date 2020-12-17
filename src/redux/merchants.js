@@ -36,9 +36,8 @@ const merchantsSlice = createSlice({
   reducers: {
     clear: () => initialState,
     reorder: (state, { payload: { draggableId, source, destination } }) => {
-      // reordering is achieved by manipulating the ids array (using Immer)
+      // Immer to the rescue
       // console.log('current(state): ', current(state))
-      console.log('reorder called')
       const [removed] = state.ids.splice(source.index, 1)
       state.ids.splice(destination.index, 0, removed)
       const originalSource =

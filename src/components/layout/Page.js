@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { DragDropContext } from 'react-beautiful-dnd'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { ThemeProvider } from '@material-ui/core/styles'
@@ -10,7 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import AppBar from '@material-ui/core/AppBar'
 
 import MenuBar from './MenuBar'
-import Filters from './Filters'
+import ToolBar from './ToolBar'
 import FloatingBar from './FloatingBar'
 
 import debounce from '../../utility/debounce'
@@ -21,59 +21,62 @@ const useStyles = makeStyles(theme => {
     layout: { menuBarHeight, toolBarHeight, sideBarWidth },
   } = theme
 
-  const toolbarsHeight = menuBarHeight + toolBarHeight
-  const sideBarHeight = 100 - toolbarsHeight
+  const barsHeight = menuBarHeight + toolBarHeight
   const mainWidth = 100 - sideBarWidth
+
   return {
     page: {
       height: '100vh',
       display: 'grid',
-      gridTemplateColumns: `${sideBarWidth}fr ${mainWidth}fr`,
-      gridTemplateRows: ({ filtersPosition }) =>
-        `${menuBarHeight}fr ${
-          filtersPosition === 'toolBar' ? toolBarHeight : 0
-        }fr ${sideBarHeight}fr`,
-      gridTemplateAreas: `
-      'menuBar main'
-      'toolBar main'
-      'side main'
-    `,
+      gridTemplateColumns: `[side] ${sideBarWidth}fr [map] ${mainWidth}fr`,
+      gridTemplateRows: '1fr',
     },
-    menuBar: {
-      gridArea: 'menuBar',
-      position: 'relative',
-    },
-    toolBar: {
-      gridArea: 'toolBar',
-      zIndex: '402',
-      position: 'relative',
-      borderRadius: theme.layout.borderRadius,
-    },
-
     sideBar: {
-      gridArea: 'side',
+      // display: 'none',
+      // gridArea: 'side',
       overflow: 'scroll',
       scrollbarWidth: 'none',
       '&::-webkit-scrollbar': {
         display: 'none',
       },
       '-ms-overflow-style': 'none',
+      zIndex: 401,
       backgroundColor: theme.palette.background.sideBar,
-      // zIndex: 401, // hides the list
-      marginTop: `-${toolbarsHeight}vh`,
-      paddingTop: `${toolbarsHeight}vh`,
-      paddingLeft: theme.layout.sideBarPadding,
-      paddingRight: theme.layout.sideBarPadding,
     },
-    main: {
-      gridArea: 'main',
+    appBar: {
+      width: `${sideBarWidth}vw`,
+      left: 0,
+      backgroundColor: theme.palette.background.sideBar,
+    },
+    menuBar: {
+      // gridArea: 'menuBar',
+      position: 'relative',
+    },
+    toolBar: {
+      // gridArea: 'toolBar',
+      zIndex: '402',
+      position: 'relative',
+      borderRadius: theme.layout.borderRadius,
+    },
+    list: {
+      // gridArea: 'list',
+      marginTop: ({ draggables }) =>
+        draggables.length ? `${barsHeight}vh` : `${menuBarHeight}vh`,
+      padding: theme.layout.sideBarPadding,
+      transition: 'margin-top 0.2s',
+    },
+    map: {
+      // gridArea: 'map',
+      height: '100%',
+      width: '100%',
     },
     floatingBar: {
       position: 'fixed',
       zIndex: '1101',
       left: `${sideBarWidth / 2 + mainWidth / 2}vw`,
-      border: ({ isFiltersDragging }) =>
-        isFiltersDragging ? '3px dashed' : 'inherit',
+      // ToDo: record isDragging in redux (debounced) and have the corresponding droppables react with theme....
+      // border: ({ isFiltersDragging }) =>
+      //   isFiltersDragging ? '3px dashed' : 'inherit',
       borderRadius: theme.layout.borderRadius,
     },
     children: {
@@ -82,88 +85,22 @@ const useStyles = makeStyles(theme => {
   }
 })
 
-const Page = ({ menuBar, filtersBar, sideBar, main, children, ...rest }) => {
-  const filtersPosition = useSelector(store => store.app.filters)
+const Page = ({ menuBar, toolBar, list, map, children, ...rest }) => {
   const dispatch = useDispatch()
-
-  const [menuBarElevation, setMenuBarElevation] = useState(0)
-  const [toolBarElevation, setToolBarElevation] = useState(0)
-  const [isFiltersDragging, setIsFiltersDragging] = useState(false)
-
-  const classes = useStyles({ filtersPosition, isFiltersDragging })
-
+  const [toolbarElevation, setToolbarElevation] = useState(0)
+  const ref = useRef()
   const theme = useTheme('light')
 
-  // for some reason or another, setting the zIndex upfront hides the list
-  // so I'm waiting for render to happen before imperatively setting it
-  const ref = useRef()
-  useEffect(() => {
-    ref.current.style.zIndex = 401
-  }, [])
+  const draggables = useSelector(store => store.app.toolBar)
+  const classes = useStyles({ draggables })
 
   const onScroll = debounce(() => {
-    if (filtersPosition === 'toolBar') {
-      setToolBarElevation(ref.current.scrollTop ? 3 : 0)
-    } else {
-      setMenuBarElevation(ref.current.scrollTop ? 3 : 0)
-    }
+    setToolbarElevation(ref.current.scrollTop ? 3 : 0)
   })
 
   return (
     <Paper square className={classes.page} {...rest}>
       <DragDropContext onDragEnd={onDragEnd(dispatch)}>
-        {menuBar && (
-          <ThemeProvider theme={theme}>
-            <AppBar elevation={menuBarElevation} className={classes.menuBar}>
-              <MenuBar />
-            </AppBar>
-          </ThemeProvider>
-        )}
-        {filtersBar && (
-          <Droppable droppableId="toolBar">
-            {(
-              { innerRef, droppableProps, placeholder },
-              { isDraggingOver }
-            ) => {
-              console.log('isDraggingOver: ', isDraggingOver)
-              return (
-                <div ref={innerRef} {...droppableProps}>
-                  <Draggable draggableId="filters" index={0}>
-                    {(
-                      { innerRef, draggableProps, dragHandleProps },
-                      { isDragging }
-                    ) => {
-                      // setIsFiltersDragging(isDragging)
-                      return (
-                        <div
-                          ref={innerRef}
-                          {...draggableProps}
-                          {...dragHandleProps}
-                        >
-                          <AppBar
-                            elevation={isFiltersDragging ? 5 : toolBarElevation}
-                            className={classes.filtersAppBar}
-                            position="relative"
-                          >
-                            <Filters
-                              style={{
-                                display:
-                                  filtersPosition === 'toolBar'
-                                    ? 'flex'
-                                    : 'none',
-                              }}
-                            />
-                          </AppBar>
-                        </div>
-                      )
-                    }}
-                  </Draggable>
-                  {placeholder}
-                </div>
-              )
-            }}
-          </Droppable>
-        )}
         <Paper
           square
           elevation={5}
@@ -171,9 +108,25 @@ const Page = ({ menuBar, filtersBar, sideBar, main, children, ...rest }) => {
           ref={ref}
           onScroll={onScroll}
         >
-          {sideBar}
+          {(menuBar || toolBar) && (
+            <AppBar elevation={toolbarElevation} className={classes.appBar}>
+              <ThemeProvider theme={theme}>
+                {menuBar && (
+                  <div className={classes.menuBar}>
+                    <MenuBar />
+                  </div>
+                )}
+              </ThemeProvider>
+              {toolBar && (
+                <div className={classes.toolBar}>
+                  <ToolBar {...{ draggables }} />
+                </div>
+              )}
+            </AppBar>
+          )}
+          <div className={classes.list}>{list}</div>
         </Paper>
-        <div className={classes.main}>{main}</div>
+        <div className={classes.map}>{map}</div>
         <div className={classes.floatingBar}>
           <FloatingBar />
         </div>
